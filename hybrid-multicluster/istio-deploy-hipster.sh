@@ -22,7 +22,7 @@ echo "### "
 # Set vars for DIRs
 export BASE_DIR=${BASE_DIR:="${PWD}/.."}
 echo "BASE_DIR set to $BASE_DIR"
-export ISTIO_CONFIG_DIR="$BASE_DIR/4-HybridMulticluster/istio"
+export ISTIO_CONFIG_DIR="$BASE_DIR/hybrid-multicluster/istio"
 
 # Get Istio ingress gateway Ip addresses from both central and remote clusters
 export GWIP_CENTRAL=$(kubectl --context central get -n istio-system service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
