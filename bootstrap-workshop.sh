@@ -27,12 +27,16 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
 
     source ./common/settings.env
     ./common/install-tools.sh
-    ./gke/provision-gke.sh
-    ./connect-hub/provision-remote-gce.sh
-    kubectx central
-    ./config-management/install-config-operator.sh
-    kubectx remote
-    ./config-management/install-config-operator.sh
+    sudo gcloud components repositories add \
+        https://storage.googleapis.com/gkehub-gcloud-dist-beta/components-2.json && \
+        sudo gcloud components update --quiet &>  ${WORK_DIR}/components-update.log &
+
+    ./gke/provision-gke.sh &> ${WORK_DIR}/provision-gke.log &
+    ./connect-hub/provision-remote-gce.sh &> ${WORK_DIR}/provision-remote.log &
+    wait
+
+    kubectx central && ./config-management/install-config-operator.sh
+    kubectx remote && ./config-management/install-config-operator.sh
 
     ./hybrid-multicluster/istio-install.sh
 
