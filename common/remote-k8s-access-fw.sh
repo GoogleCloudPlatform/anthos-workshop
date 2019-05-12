@@ -17,8 +17,10 @@
 # Variables
 INSTANCE_IP=$(curl -s api.ipify.org)
 INSTANCE_CIDR=$INSTANCE_IP/32
-FIREWALL_RULE=https-api-remote-k8s-local
+ARRAY=("https-api-remote-k8s-local" "ssh-external-to-master-remote-k8s-local" "ssh-external-to-node-remote-k8s-local")
 
-echo "Updating firewall-rule $FIREWALL_RULE source-range to $INSTANCE_CIDR"
-
-gcloud compute firewall-rules update https-api-remote-k8s-local --source-ranges=$INSTANCE_CIDR
+for item in ${ARRAY[@]}
+do
+  echo "Updating firewall-rule $item source-range to $INSTANCE_CIDR"
+  gcloud compute firewall-rules update $item --source-ranges=$INSTANCE_CIDR
+done
