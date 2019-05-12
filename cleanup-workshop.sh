@@ -24,9 +24,11 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     gcloud config set project $PROJECT
 
     ./connect-hub/cleanup-hub.sh
-    ./connect-hub/cleanup-remote-gce.sh
-    ./gke/cleanup-gke.sh
+    ./connect-hub/cleanup-remote-gce.sh&> ${WORK_DIR}/cleanup-remote.log &
+    ./gke/cleanup-gke.sh  &> ${WORK_DIR}/cleanup-gke.log &
     #./common/cleanup-tools.sh
+
+    rm -rf $WORK_DIR
 
 else
     echo "This has only been tested in GCP Cloud Shell.  Only Linux (debian) is supported".

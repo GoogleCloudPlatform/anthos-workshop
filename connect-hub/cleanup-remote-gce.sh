@@ -30,4 +30,4 @@ kubectx -d $REMOTE_CLUSTER_NAME_BASE
 
 gsutil -m rm -r $KOPS_STORE
 
-rm -rf $WORK_DIR
+
