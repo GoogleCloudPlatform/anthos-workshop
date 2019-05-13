@@ -14,7 +14,7 @@ Topics covered will include:
 
 Connect & Hub
 
-- Register non-GKE k8s to hub
+- Register non-GKE kubernetes to hub
 - Deploy workloads - Hybrid hipster
 - Review GKE & non GKE clusters and workloads through hub
 
