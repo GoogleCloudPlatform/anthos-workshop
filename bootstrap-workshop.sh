@@ -25,11 +25,10 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     echo "WORK_DIR set to $WORK_DIR"
     gcloud config set project $PROJECT
 
+    echo "Multiple tasks are running asynchronously to setup your environment.  It may appear frozen, but you can check the logs in $WORK_DIR for additional details in another terminal window." 
+
     source ./common/settings.env
     ./common/install-tools.sh
-    sudo gcloud components repositories add \
-        https://storage.googleapis.com/gkehub-gcloud-dist-beta/components-2.json && \
-        sudo gcloud components update --quiet &>  ${WORK_DIR}/components-update.log &
 
     ./gke/provision-gke.sh &> ${WORK_DIR}/provision-gke.log &
     ./connect-hub/provision-remote-gce.sh &> ${WORK_DIR}/provision-remote.log &
