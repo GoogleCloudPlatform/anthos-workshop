@@ -29,9 +29,6 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
 
     source ./common/settings.env
     ./common/install-tools.sh
-    sudo gcloud components repositories add \
-        https://storage.googleapis.com/gkehub-gcloud-dist-beta/components-2.json && \
-        sudo gcloud components update --quiet &>  ${WORK_DIR}/components-update.log &
 
     ./gke/provision-gke.sh &> ${WORK_DIR}/provision-gke.log &
     ./connect-hub/provision-remote-gce.sh &> ${WORK_DIR}/provision-remote.log &
