@@ -38,6 +38,8 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
 
     ./hybrid-multicluster/istio-install.sh
 
+    ./service-mesh/enable-service-mesh.sh
+
 else
     echo "This has only been tested in GCP Cloud Shell.  Only Linux (debian) is supported".
 fi
