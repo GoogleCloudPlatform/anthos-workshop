@@ -25,8 +25,6 @@ pe "gcloud services enable \
     sourcerepo.googleapis.com \
     --async"
 
-pe "git clone https://github.com/GoogleCloudPlatform/anthos-workshop.git anthos-workshop"
-
 # Initial build
 pe "cd anthos-workshop"
 pe "source ./env"
