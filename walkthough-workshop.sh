@@ -14,6 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+sudo apt-get -qq install pv
 . common/demo-magic.sh
 
 pe "gcloud services enable \
