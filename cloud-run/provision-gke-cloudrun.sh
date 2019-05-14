@@ -21,8 +21,8 @@ echo "### "
 set -euo pipefail
 log() { echo "$1" >&2; }
 
-# set vars, remove or move into 1-settings.env when live for 0-full-install.sh
-export CLOUDRUN_CLUSTER_NAME=cloud-run-gke
+# set vars
+export CLOUDRUN_CLUSTER_NAME=cloudrun
 export CLOUDRUN_ZONE=us-west1-a
 export PROJECT=$(gcloud config get-value project)
 
