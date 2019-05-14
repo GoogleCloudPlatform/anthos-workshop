@@ -28,6 +28,7 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     ./gke/cleanup-gke.sh  &> ${WORK_DIR}/cleanup-gke.log &
     #./common/cleanup-tools.sh
     gcloud source repos delete --quiet config-repo
+    rm $HOME/.ssh/id_rsa.nomos.*
     wait
 
     rm -rf $WORK_DIR
