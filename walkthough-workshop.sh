@@ -26,7 +26,6 @@ pe "gcloud services enable \
     --async"
 
 # Initial build
-pe "cd anthos-workshop"
 pe "source ./env"
 pe "source ./bootstrap-workshop.sh"
 pe "source ./service-mesh/enable-service-mesh.sh"
