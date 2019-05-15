@@ -32,6 +32,25 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     wait
 
     rm -rf $WORK_DIR
+    
+    # Delete forwarding rule created by Istio ingress gateway on remote cluster
+    gcloud compute forwarding-rules delete $(gcloud compute forwarding-rules list --format="value(name)") --region us-central1 --quiet
+
+    # Delete target-pools created by Istio ingress gateway on remote cluster
+    gcloud compute target-pools delete $(gcloud compute target-pools list --format="value(name)") --region us-central1 --quiet
+
+    # Delete config-repo fro CSR
+    gcloud source repos delete config-repo --quiet
+
+    # Delete kubeconfig
+    rm $HOME/.kube/config
+
+    # Delete remaining files and folders
+    cd $HOME
+    rm -rf anthos-workshop
+    rm -rf config-repo
+    rm csm-alpha-onboard-logs
+    rm -rf gopath
 
 else
     echo "This has only been tested in GCP Cloud Shell.  Only Linux (debian) is supported".
