@@ -47,7 +47,6 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
 
     # Delete remaining files and folders
     cd $HOME
-    rm -rf anthos-workshop
     rm -rf config-repo
     rm csm-alpha-onboard-logs
     rm -rf gopath
