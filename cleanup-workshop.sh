@@ -20,15 +20,16 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
 
     export PROJECT=$(gcloud config get-value project)
     export WORK_DIR=${WORK_DIR:="${PWD}/workdir"}
+
     echo "WORK_DIR set to $WORK_DIR"
+
     gcloud config set project $PROJECT
 
+    # Clean up resources in the background and wait for completion
     ./connect-hub/cleanup-hub.sh
-    ./connect-hub/cleanup-remote-gce.sh&> ${WORK_DIR}/cleanup-remote.log &
-    ./gke/cleanup-gke.sh  &> ${WORK_DIR}/cleanup-gke.log &
-    #./common/cleanup-tools.sh
-    gcloud source repos delete --quiet config-repo
-    rm $HOME/.ssh/id_rsa.nomos.*
+    ./connect-hub/cleanup-remote-gce.sh &> ${WORK_DIR}/cleanup-remote.log &
+    ./gke/cleanup-gke.sh &> ${WORK_DIR}/cleanup-gke.log &
+
     wait
 
     rm -rf $WORK_DIR
@@ -39,7 +40,7 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     # Delete target-pools created by Istio ingress gateway on remote cluster
     gcloud compute target-pools delete $(gcloud compute target-pools list --format="value(name)") --region us-central1 --quiet
 
-    # Delete config-repo fro CSR
+    # Delete config-repo from CSR
     gcloud source repos delete config-repo --quiet
 
     # Delete kubeconfig
@@ -50,6 +51,7 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     rm -rf config-repo
     rm csm-alpha-onboard-logs
     rm -rf gopath
+    rm .ssh/id_rsa.nomos.*
 
 else
     echo "This has only been tested in GCP Cloud Shell.  Only Linux (debian) is supported".
