@@ -36,3 +36,7 @@ export ISTIO_CONFIG_DIR="$BASE_DIR/hybrid-multicluster/istio"
 kubectx central
 kubectl apply -n hipster2  -f ${ISTIO_CONFIG_DIR}/hipster 
 kubectl delete -n hipster2 -f ${ISTIO_CONFIG_DIR}/central/service-entries.yaml
+
+# Delete remaining Hipster workloads, services, serviceentries and namespace hipster1 from remote cluster
+kubectx remote
+kubectl delete -n hipster1  -f ${ISTIO_CONFIG_DIR}/remote
