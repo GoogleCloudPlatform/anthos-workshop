@@ -27,9 +27,29 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     ./connect-hub/cleanup-remote-gce.sh&> ${WORK_DIR}/cleanup-remote.log &
     ./gke/cleanup-gke.sh  &> ${WORK_DIR}/cleanup-gke.log &
     #./common/cleanup-tools.sh
+    gcloud source repos delete --quiet config-repo
+    rm $HOME/.ssh/id_rsa.nomos.*
     wait
 
     rm -rf $WORK_DIR
+    
+    # Delete forwarding rule created by Istio ingress gateway on remote cluster
+    gcloud compute forwarding-rules delete $(gcloud compute forwarding-rules list --format="value(name)") --region us-central1 --quiet
+
+    # Delete target-pools created by Istio ingress gateway on remote cluster
+    gcloud compute target-pools delete $(gcloud compute target-pools list --format="value(name)") --region us-central1 --quiet
+
+    # Delete config-repo fro CSR
+    gcloud source repos delete config-repo --quiet
+
+    # Delete kubeconfig
+    rm $HOME/.kube/config
+
+    # Delete remaining files and folders
+    cd $HOME
+    rm -rf config-repo
+    rm csm-alpha-onboard-logs
+    rm -rf gopath
 
 else
     echo "This has only been tested in GCP Cloud Shell.  Only Linux (debian) is supported".

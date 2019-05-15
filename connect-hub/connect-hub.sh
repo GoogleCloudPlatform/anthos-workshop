@@ -33,10 +33,7 @@ echo "### "
 
 
 # Install Tools
-### Access hub alpha
-sudo gcloud components repositories add https://storage.googleapis.com/gkehub-gcloud-dist-beta/components-2.json
-sudo gcloud components update
-
+### Access hub alpha, gcloud 244+ includes hub commands
 
 # Switch to remote Context
 kubectx $REMOTE_CLUSTER_NAME_BASE

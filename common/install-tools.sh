@@ -28,7 +28,7 @@ echo "### Begin Tools install"
 echo "### "
 
 ## Install kubectx
-curl -LO https://raw.githubusercontent.com/ahmetb/kubectx/master/kubectx 
+curl -sLO https://raw.githubusercontent.com/ahmetb/kubectx/master/kubectx 
 chmod +x kubectx 
 mv kubectx $WORK_DIR/bin
 
@@ -41,7 +41,7 @@ mv kubectx $WORK_DIR/bin
 #rm ./get_helm.sh
 
 HELM_VERSION=v2.13.0
-wget https://storage.googleapis.com/kubernetes-helm/helm-"$HELM_VERSION"-linux-amd64.tar.gz
+wget -q https://storage.googleapis.com/kubernetes-helm/helm-"$HELM_VERSION"-linux-amd64.tar.gz
 tar -xvzf helm-"$HELM_VERSION"-linux-amd64.tar.gz
 mv linux-amd64/helm $WORK_DIR/bin
 mv linux-amd64/tiller $WORK_DIR/bin
