@@ -61,6 +61,5 @@ mv istio-$ISTIO_VERSION $WORK_DIR/
 
 
 
-# Install Tree
-sudo apt-get install tree
+
 
