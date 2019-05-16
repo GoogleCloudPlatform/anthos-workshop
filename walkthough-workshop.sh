@@ -29,7 +29,6 @@ pe "gcloud services enable \
 # Initial build
 pe "source ./env"
 pe "source ./bootstrap-workshop.sh"
-pe "source ./service-mesh/enable-service-mesh.sh"
 pe "kubectx remote"
 pe "kubectl get nodes"
 
