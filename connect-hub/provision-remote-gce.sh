@@ -41,14 +41,6 @@ curl -sLO https://github.com/kubernetes/kops/releases/download/$(curl -s https:/
 chmod +x kops-linux-amd64
 mv kops-linux-amd64 $WORK_DIR/bin/kops
 
-
-# Enable the right APIs
-gcloud services enable --project=$PROJECT \
-        container.googleapis.com \
-        gkehub.googleapis.com \
-        gkeconnect.googleapis.com 
-        # compute
-
 # Unlock GCE features (?)
 export KOPS_FEATURE_FLAGS=AlphaAllowGCE
 
