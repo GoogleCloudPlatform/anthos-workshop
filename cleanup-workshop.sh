@@ -43,15 +43,12 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     # Delete config-repo from CSR
     gcloud source repos delete config-repo --quiet
 
-    # Delete kubeconfig
-    rm $HOME/.kube/config
-
     # Delete remaining files and folders
-    cd $HOME
-    rm -rf config-repo
-    rm csm-alpha-onboard-logs
-    rm -rf gopath
-    rm .ssh/id_rsa.nomos.*
+    rm -rf $HOME/.kube/config \
+           $HOME/config-repo \
+           $HOME/csm-alpha-onboard-logs \
+           $HOME/gopath \
+           $HOME/.ssh/id_rsa.nomos.*
 
 else
     echo "This has only been tested in GCP Cloud Shell.  Only Linux (debian) is supported".
