@@ -8,6 +8,9 @@ Anthos is a [modern application management platform](https://cloud.google.com/an
 - Infrastructure management tooling, security, policies and compliance solutions.
 - Streamlined application development, service discovery and telemetry, service management, and workload migration from on-premises to cloud.
 
+*_Nachmany, Udi (2018, November). Kubernetes: Evolution Of An IT Revolution. Retrieved from https://www.forbes.com/sites/udinachmany/2018/11/01/kubernetes-evolution-of-an-it-revolution/#5916c8a554e1_
+
+
 ## About this Repository
 This repository contains the scripts and configurations intended for instructional purposes as part of the Anthos Workshop.
 
