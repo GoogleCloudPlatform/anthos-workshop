@@ -14,6 +14,13 @@ RUN CGO_ENABLED=0 GOOS=linux go build -v -o main
 # https://docs.docker.com/develop/develop-images/multistage-build/#use-multi-stage-builds
 FROM alpine
 
+# Dealing with x509 issue
+RUN apk update \
+        && apk upgrade \
+        && apk add --no-cache \
+        ca-certificates \
+        && update-ca-certificates 2>/dev/null || true
+
 # Copy the binary to the production image from the builder stage.
 COPY --from=builder /app/main .
 
