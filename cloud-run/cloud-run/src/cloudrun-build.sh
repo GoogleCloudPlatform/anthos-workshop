@@ -25,6 +25,10 @@ REGION=us-central1
 SERVICE_NAME=cloud-run-vision
 PROJECT_ID=$(gcloud config list --format 'value(core.project)')
 
+echo "Enabling Cloud Build API"
+gcloud services enable cloudbuild.googleapis.com
+
+echo "Submiting build job to Cloud Build targeting gcr.io/$PROJECT_ID/$SERVICE_NAME"
 gcloud builds submit --tag gcr.io/$PROJECT_ID/$SERVICE_NAME .
 
 echo "Updating $SERVICE_NAME with new image gcr.io/$PROJECT_ID/$SERVICE_NAME:latest"
