@@ -33,3 +33,8 @@ gcloud builds submit --tag gcr.io/$PROJECT_ID/$SERVICE_NAME .
 
 echo "Updating $SERVICE_NAME with new image gcr.io/$PROJECT_ID/$SERVICE_NAME:latest"
 gcloud beta run deploy $SERVICE_NAME --image gcr.io/$PROJECT_ID/$SERVICE_NAME:latest --region $REGION --allow-unauthenticated
+
+echo "Exporting Cloud Run URL"
+CLOUD_RUN_URL=$(gcloud beta run services list --format=flattened | grep status.address.hostname | awk 'FNR == 1 {print $2}')
+
+echo "You can now access your Cloud Run app at $CLOUD_RUN_URL"
