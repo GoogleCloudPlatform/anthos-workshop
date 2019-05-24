@@ -147,6 +147,7 @@ func uploadObject(localFilePath string, remoteFilePath string, bucketName string
 	defer f.Close()
 
 	wc := client.Bucket(bucketName).Object(remoteFilePath).NewWriter(ctx)
+	wc.ContentType = "application/json"
 	if _, err = io.Copy(wc, f); err != nil {
 		return err
 	}
