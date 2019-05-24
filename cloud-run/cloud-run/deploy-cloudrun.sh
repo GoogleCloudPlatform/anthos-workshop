@@ -19,7 +19,7 @@ echo "# Deploying a Cloud Run app that integrates with GCS, PubSub, and Vision A
 echo "###"
 
 REGION=us-central1
-CLOUD_RUN_IMAGE_ID=gcr.io/alexmattson-scratch/cloud-run-gcs-computer-vision-demo-02@sha256:a7359ecfd136e47daaf749b55527e5cbb252da2f06fd7bb846ed7a6d28564f58
+CLOUD_RUN_IMAGE_ID=gcr.io/alexmattson-scratch/cloud-run-gcs-computer-vision-demo-02:750b8f9914fefe8832c0d46df846b7a2a378c836
 
 SERVICE_NAME=cloud-run-vision
 PROJECT_ID=$(gcloud config list --format 'value(core.project)')
