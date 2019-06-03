@@ -1,5 +1,3 @@
-#!/bin/bash
-
 #!/usr/bin/env bash
 
 # Copyright 2019 Google LLC
@@ -21,7 +19,7 @@ echo "# Deploying a Cloud Run app that integrates with GCS, PubSub, and Vision A
 echo "###"
 
 REGION=us-central1
-CLOUD_RUN_IMAGE_ID=gcr.io/alexmattson-scratch/cloud-run-gcs-computer-vision-demo-01:97ae42ca9c24ff07bef4e14a6b4e22959e8c9f3d
+CLOUD_RUN_IMAGE_ID=gcr.io/alexmattson-scratch/cloud-run-gcs-computer-vision-demo-02:750b8f9914fefe8832c0d46df846b7a2a378c836
 
 SERVICE_NAME=cloud-run-vision
 PROJECT_ID=$(gcloud config list --format 'value(core.project)')
