@@ -15,7 +15,7 @@
 # limitations under the License.
 
 echo "### "
-echo "### Deploying hipster app on central and remote clusters"
+echo "### Deploying hipster app on central "
 echo "### "
 
 
@@ -24,9 +24,8 @@ export BASE_DIR=${BASE_DIR:="${PWD}/.."}
 echo "BASE_DIR set to $BASE_DIR"
 export ISTIO_CONFIG_DIR="$BASE_DIR/hybrid-multicluster/istio"
 
-# Get Istio ingress gateway Ip addresses from both central and remote clusters
+# Get Istio ingress gateway Ip addresses from  central
 export GWIP_CENTRAL=$(kubectl --context central get -n istio-system service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-export GWIP_REMOTE=$(kubectl --context remote get -n istio-system service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
 
 # Prepare central cluster hipster manifests
 # change context to central cluster
