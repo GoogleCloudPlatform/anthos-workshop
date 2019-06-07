@@ -54,7 +54,7 @@ if [[ true ]]; then
 
     write_state
 
-    #exit
+    exit
     
     echo "WORK_DIR set to $WORK_DIR"
     gcloud config set project $PROJECT
@@ -65,7 +65,6 @@ if [[ true ]]; then
 
 
     ./gke/provision-gke.sh &> ${WORK_DIR}/provision-gke.log &
-
 
     shopt -s nocasematch
     if [[ ${KOPS_GCE} != y ]]; then
