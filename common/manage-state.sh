@@ -3,6 +3,7 @@ function load_state() {
 }
 
 function write_state() {
+    mkdir -p $WORK_DIR
     touch $WORK_DIR/state.env
     echo "# Updated $(date)" > $WORK_DIR/state.env
     echo "export CSM_PROVISIONED=Y" >> $WORK_DIR/state.env

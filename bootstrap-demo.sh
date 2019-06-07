@@ -39,7 +39,7 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     read -e -p "Kops on AWS? (Y/N) [${KOPS_AWS:-$KOPS_AWS}]:" kopsa 
     KOPS_AWS=${kopsa:-"$AWS_SECRET_ACCESS_KEY"}
     shopt -s nocasematch
-    if [[ ${KOPS_AWS} != y ]]; then
+    if [[ ${KOPS_AWS} == y ]]; then
 
         # AWS ID
         read -e -p "AWS_ACCESS_KEY_ID [${AWS_ACCESS_KEY_ID:-$AWS_ACCESS_KEY_ID}]:" id 
@@ -54,7 +54,7 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
 
     write_state
 
-    exit
+
     
     echo "WORK_DIR set to $WORK_DIR"
     gcloud config set project $PROJECT
