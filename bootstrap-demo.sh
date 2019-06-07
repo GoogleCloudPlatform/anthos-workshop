@@ -67,12 +67,12 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     ./gke/provision-gke.sh &> ${WORK_DIR}/provision-gke.log &
 
     shopt -s nocasematch
-    if [[ ${KOPS_GCE} != y ]]; then
+    if [[ ${KOPS_GCE} == y ]]; then
         ./connect-hub/provision-remote-gce.sh &> ${WORK_DIR}/provision-remote.log &
     fi
 
     shopt -s nocasematch
-    if [[ ${KOPS_AWS} != y ]]; then
+    if [[ ${KOPS_AWS} == y ]]; then
         ./connect-hub/provision-remote-aws.sh &> ${WORK_DIR}/provision-remote-aws.log &
     fi
 
