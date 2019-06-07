@@ -15,6 +15,8 @@
 # limitations under the License.
 
 source ./env
+source $BASE_DIR/common/manage-state.sh 
+load_state
 
 export PROJECT=$(gcloud config get-value project)
 export WORK_DIR=${WORK_DIR:="${PWD}/workdir"}
@@ -26,11 +28,18 @@ gcloud config set project $PROJECT
 # Clean up resources in the background and wait for completion
 ./connect-hub/cleanup-hub.sh
 
-./connect-hub/cleanup-remote-aws.sh
+shopt -s nocasematch
+if [[ ${KOPS_AWS} == y ]]; then
+    ./connect-hub/cleanup-remote-aws.sh 
+fi
+
+shopt -s nocasematch
+if [[ ${KOPS_GCE} == y ]]; then
+    ./connect-hub/cleanup-remote-gce.sh 
+fi
 
 ./gke/cleanup-gke.sh 
 
 
 rm -rf $WORK_DIR
 
-rm eks-cluster-kubeconfig.yaml
