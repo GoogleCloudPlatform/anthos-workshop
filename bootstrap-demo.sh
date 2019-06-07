@@ -21,7 +21,7 @@
 
 
 
-if [[ true ]]; then 
+if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then 
 
     export PROJECT=$(gcloud config get-value project)
     export BASE_DIR=${BASE_DIR:="${PWD}"}
