@@ -21,12 +21,41 @@
 
 
 
-if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then 
+if [[ true ]]; then 
 
     export PROJECT=$(gcloud config get-value project)
     export BASE_DIR=${BASE_DIR:="${PWD}"}
     export WORK_DIR=${WORK_DIR:="${BASE_DIR}/workdir"}
 
+    source $BASE_DIR/common/manage-state.sh 
+    load_state
+
+  
+    # Kops on GCE?
+    read -e -p "Kops on GCE? (Y/N) [${KOPS_GCE:-$KOPS_GCE}]:" kopsg 
+    KOPS_GCE=${kopsg:-"$KOPS_GCE"}
+
+    # Kops on AWS?
+    read -e -p "Kops on AWS? (Y/N) [${KOPS_AWS:-$KOPS_AWS}]:" kopsa 
+    KOPS_AWS=${kopsa:-"$AWS_SECRET_ACCESS_KEY"}
+    shopt -s nocasematch
+    if [[ ${KOPS_AWS} != y ]]; then
+
+        # AWS ID
+        read -e -p "AWS_ACCESS_KEY_ID [${AWS_ACCESS_KEY_ID:-$AWS_ACCESS_KEY_ID}]:" id 
+        AWS_ACCESS_KEY_ID=${id:-"$AWS_ACCESS_KEY_ID"}
+        
+        # AWS Key
+        read -e -p "AWS_SECRET_ACCESS_KEY [${AWS_SECRET_ACCESS_KEY:-$AWS_SECRET_ACCESS_KEY}]:" key 
+        AWS_SECRET_ACCESS_KEY=${key:-"$AWS_SECRET_ACCESS_KEY"}
+    fi
+   
+
+
+    write_state
+
+    #exit
+    
     echo "WORK_DIR set to $WORK_DIR"
     gcloud config set project $PROJECT
 
@@ -34,9 +63,20 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     ./common/install-tools.sh
     echo -e "\nMultiple tasks are running asynchronously to setup your environment.  It may appear frozen, but you can check the logs in $WORK_DIR for additional details in another terminal window." 
 
+
     ./gke/provision-gke.sh &> ${WORK_DIR}/provision-gke.log &
-    ./connect-hub/provision-remote-gce.sh &> ${WORK_DIR}/provision-remote.log &
-    #./connect-hub/provision-remote-aws.sh &> ${WORK_DIR}/provision-remote-aws.log &
+
+
+    shopt -s nocasematch
+    if [[ ${KOPS_GCE} != y ]]; then
+        ./connect-hub/provision-remote-gce.sh &> ${WORK_DIR}/provision-remote.log &
+    fi
+
+    shopt -s nocasematch
+    if [[ ${KOPS_AWS} != y ]]; then
+        ./connect-hub/provision-remote-aws.sh &> ${WORK_DIR}/provision-remote-aws.log &
+    fi
+
     wait
 
     kubectx central && ./config-management/install-config-operator.sh
