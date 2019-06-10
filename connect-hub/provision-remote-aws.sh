@@ -57,7 +57,9 @@ sudo mv ./kops $HOME/.local/bin/
 
 # Variables
 export PROJECT=$(gcloud config get-value project)
-export REMOTE_CLUSTER_NAME_BASE="remote"
+#export REMOTE_CLUSTER_NAME_BASE="remote-a"
+export REMOTE_CLUSTER_NAME_BASE=${AWS_CONTEXT:-"external"}
+
 export REMOTE_CLUSTER_NAME=$REMOTE_CLUSTER_NAME_BASE.k8s.local
 export KOPS_STORE=s3://$PROJECT-kops-$REMOTE_CLUSTER_NAME_BASE
 export KOPS_STATE_STORE=$KOPS_STORE
