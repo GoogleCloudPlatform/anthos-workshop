@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-# push policy to repo 
+# push policy to repo
 mkdir namespaces/hipster2
 
 cat <<EOF > namespaces/hipster2/meshpolicy.yaml
@@ -30,5 +30,7 @@ EOF
 export EMAIL=$(gcloud config get-value account)
 git config --global user.email "$EMAIL"
 git config --global user.name "$USER"
-git add . && git commit -m 'adding meshpolicy - hipster2 namespace'
+echo $EMAIL 
+echo $USER
+git add . && git commit -m 'adding meshpolicy, hipster2 namespace'
 git push origin master
