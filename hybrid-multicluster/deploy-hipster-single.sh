@@ -31,9 +31,8 @@ export GWIP_CENTRAL=$(kubectl --context central get -n istio-system service isti
 # change context to central cluster
 kubectx central
 # Prepare the service-entries yaml to add the remote cluster istio ingress gateway IP 
-# for all services running in the remote cluster
 export pattern='.*- address:.*'
-export replace="  - address: "$GWIP_REMOTE""
+export replace="  - address: "$GWIP_CENTRAL""
 sed -r -i "s|$pattern|$replace|g" ${ISTIO_CONFIG_DIR}/central/service-entries.yaml
 
 # Create hipster2 namespace and enable istioInjection on the namespace

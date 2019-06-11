@@ -30,24 +30,36 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     source $BASE_DIR/common/manage-state.sh 
     load_state
 
-  
+    
     # Kops on GCE?
     read -e -p "Kops on GCE? (Y/N) [${KOPS_GCE:-$KOPS_GCE}]:" kopsg 
     KOPS_GCE=${kopsg:-"$KOPS_GCE"}
 
+    shopt -s nocasematch
+    if [[ ${KOPS_GCE} == y ]]; then
+        # GCE Context name
+        read -e -p 'GCE_CONTEXT [remote]:' key
+        export GCE_CONTEXT=${key:-"remote"} 
+    fi
+
     # Kops on AWS?
     read -e -p "Kops on AWS? (Y/N) [${KOPS_AWS:-$KOPS_AWS}]:" kopsa 
-    KOPS_AWS=${kopsa:-"$AWS_SECRET_ACCESS_KEY"}
+    KOPS_AWS=${kopsa:-"$KOPS_AWS"}
     shopt -s nocasematch
     if [[ ${KOPS_AWS} == y ]]; then
 
         # AWS ID
         read -e -p "AWS_ACCESS_KEY_ID [${AWS_ACCESS_KEY_ID:-$AWS_ACCESS_KEY_ID}]:" id 
-        AWS_ACCESS_KEY_ID=${id:-"$AWS_ACCESS_KEY_ID"}
+        export AWS_ACCESS_KEY_ID=${id:-"$AWS_ACCESS_KEY_ID"}
         
         # AWS Key
         read -e -p "AWS_SECRET_ACCESS_KEY [${AWS_SECRET_ACCESS_KEY:-$AWS_SECRET_ACCESS_KEY}]:" key 
-        AWS_SECRET_ACCESS_KEY=${key:-"$AWS_SECRET_ACCESS_KEY"}
+        export AWS_SECRET_ACCESS_KEY=${key:-"$AWS_SECRET_ACCESS_KEY"}
+
+        # AWS Context name
+        read -e -p 'AWS_CONTEXT [external]:' key
+        export AWS_CONTEXT=${key:-"external"} 
+        
     fi
    
 
@@ -66,15 +78,11 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
 
     ./gke/provision-gke.sh &> ${WORK_DIR}/provision-gke.log &
 
-    shopt -s nocasematch
-    if [[ ${KOPS_GCE} == y ]]; then
-        ./connect-hub/provision-remote-gce.sh &> ${WORK_DIR}/provision-remote.log &
-    fi
-
-    shopt -s nocasematch
-    if [[ ${KOPS_AWS} == y ]]; then
-        ./connect-hub/provision-remote-aws.sh &> ${WORK_DIR}/provision-remote-aws.log &
-    fi
+ 
+    ./connect-hub/provision-remote-gce.sh &> ${WORK_DIR}/provision-remote.log &
+    
+    ./connect-hub/provision-remote-aws.sh &> ${WORK_DIR}/provision-remote-aws.log &
+  
 
     wait
 
@@ -88,7 +96,15 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     #./service-mesh/enable-service-mesh.sh
 
 
-    ./connect-hub/connect-hub.sh
+    shopt -s nocasematch
+    if [[ ${KOPS_GCE} == y ]]; then
+        export CONTEXT=$GCE_CONTEXT && ./connect-hub/connect-hub.sh
+    fi
+    shopt -s nocasematch
+    if [[ ${KOPS_AWS} == y ]]; then
+        export CONTEXT=$AWS_CONTEXT && ./connect-hub/connect-hub.sh
+    fi
+    
 
 
 else

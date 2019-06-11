@@ -58,8 +58,11 @@ mv istio-$ISTIO_VERSION $WORK_DIR/
 #curl -o yq.v2 -OL https://github.com/mikefarah/yq/releases/download/2.3.0/yq_linux_amd64
 #chmod +x yq.v2
 #mv yq.v2 $WORK_DIR/bin
-
-
+ 
+# Install Kops
+curl -sLO https://github.com/kubernetes/kops/releases/download/$(curl -s https://api.github.com/repos/kubernetes/kops/releases/latest | grep tag_name | cut -d '"' -f 4)/kops-linux-amd64
+chmod +x kops-linux-amd64
+mv kops-linux-amd64 $WORK_DIR/bin/kops
 
 
 

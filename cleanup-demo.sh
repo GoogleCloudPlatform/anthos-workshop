@@ -26,15 +26,17 @@ echo "WORK_DIR set to $WORK_DIR"
 gcloud config set project $PROJECT
 
 # Clean up resources in the background and wait for completion
-./connect-hub/cleanup-hub.sh
+
 
 shopt -s nocasematch
 if [[ ${KOPS_AWS} == y ]]; then
+    export CONTEXT=$AWS_CONTEXT && ./connect-hub/cleanup-hub.sh
     ./connect-hub/cleanup-remote-aws.sh 
 fi
 
 shopt -s nocasematch
 if [[ ${KOPS_GCE} == y ]]; then
+    export CONTEXT=$AWS_CONTEXT && ./connect-hub/cleanup-hub.sh
     ./connect-hub/cleanup-remote-gce.sh 
 fi
 

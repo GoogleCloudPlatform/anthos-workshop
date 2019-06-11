@@ -61,9 +61,9 @@ export PROJECT=$(gcloud config get-value project)
 export REMOTE_CLUSTER_NAME_BASE=${AWS_CONTEXT:-"external"}
 
 export REMOTE_CLUSTER_NAME=$REMOTE_CLUSTER_NAME_BASE.k8s.local
-export KOPS_STORE=s3://$PROJECT-kops-$REMOTE_CLUSTER_NAME_BASE
+export KOPS_STORE=s3://$PROJECT-kops-$REMOTE_CLUSTER_NAME_BASE-11
 export KOPS_STATE_STORE=$KOPS_STORE
-export REMOTE_KUBECONFIG=$WORK_DIR/remote.context
+export REMOTE_KUBECONFIG=$WORK_DIR/${REMOTE_CLUSTER_NAME_BASE}.context
 export NODE_COUNT=4
 export NODE_SIZE=t3.medium
 export ZONES=us-west-2a
