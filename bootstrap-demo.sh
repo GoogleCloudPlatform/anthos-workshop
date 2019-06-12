@@ -30,10 +30,13 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     source $BASE_DIR/common/manage-state.sh 
     load_state
 
-    
+    # Kops on GCE?
+    read -e -p "Create GKE Cluster? (Y/N) [y]:" gke 
+    export GKE_CLUSTER=${gke:-"y"}
+
     # Kops on GCE?
     read -e -p "Kops on GCE? (Y/N) [${KOPS_GCE:-$KOPS_GCE}]:" kopsg 
-    KOPS_GCE=${kopsg:-"$KOPS_GCE"}
+    export KOPS_GCE=${kopsg:-"$KOPS_GCE"}
 
     shopt -s nocasematch
     if [[ ${KOPS_GCE} == y ]]; then
@@ -44,7 +47,7 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
 
     # Kops on AWS?
     read -e -p "Kops on AWS? (Y/N) [${KOPS_AWS:-$KOPS_AWS}]:" kopsa 
-    KOPS_AWS=${kopsa:-"$KOPS_AWS"}
+    export KOPS_AWS=${kopsa:-"$KOPS_AWS"}
     shopt -s nocasematch
     if [[ ${KOPS_AWS} == y ]]; then
 
@@ -62,7 +65,16 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
         
     fi
    
+    # Config repo source 
+    read -e -p "Config Repo Source [https://github.com/cgrant/policy-repo]:" reposource 
+    export REPO_URL=${reposource:-"$REPO_URL"}
 
+
+    # Deploy Hipster?
+    read -e -p "Deploy hipster with kubectl? (Y/N) [y]:" deployhip 
+    export DEPLOY_HIPSTER=${deployhip:-"y"}
+
+   
 
     write_state
 
@@ -71,40 +83,109 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     echo "WORK_DIR set to $WORK_DIR"
     gcloud config set project $PROJECT
 
+## Install Tooling
     source ./common/settings.env
     ./common/install-tools.sh
     echo -e "\nMultiple tasks are running asynchronously to setup your environment.  It may appear frozen, but you can check the logs in $WORK_DIR for additional details in another terminal window." 
 
+## Provision Clusters
 
-    ./gke/provision-gke.sh &> ${WORK_DIR}/provision-gke.log &
+    # GKE
+    shopt -s nocasematch
+    if [[ ${GKE_CLUSTER} == y ]]; then
+        ./gke/provision-gke.sh &> ${WORK_DIR}/provision-gke.log &
+    fi
 
- 
-    ./connect-hub/provision-remote-gce.sh &> ${WORK_DIR}/provision-remote.log &
+    # GCE
+    shopt -s nocasematch
+    if [[ ${KOPS_GCE} == y ]]; then
+        ./connect-hub/provision-remote-gce.sh &> ${WORK_DIR}/provision-gce-${GCE_CONTEXT}.log &
+    fi
     
-    ./connect-hub/provision-remote-aws.sh &> ${WORK_DIR}/provision-remote-aws.log &
-  
+    # External
+    shopt -s nocasematch
+    if [[ ${KOPS_AWS} == y ]]; then
+        ./connect-hub/provision-remote-aws.sh &> ${WORK_DIR}/provision-aws-${AWS_CONTEXT}.log &
+    fi
 
     wait
 
-    kubectx central && ./config-management/install-config-operator.sh
-    kubectx remote && ./config-management/install-config-operator.sh
+## Install Anthos Config Manager
+
+    # GKE
+    shopt -s nocasematch
+    if [[ ${GKE_CLUSTER} == y ]]; then
+        kubectx central && ./config-management/install-config-operator.sh
+        kubectx central && ./config-management/install-config-operator.sh
+    fi
 
 
-    kubectx central && ./hybrid-multicluster/istio-install-single.sh
-    ./hybrid-multicluster/deploy-hipster-single.sh
+    # GCE
+    shopt -s nocasematch
+    if [[ ${KOPS_GCE} == y ]]; then
+        kubectx ${GCE_CONTEXT} && ./config-management/install-config-operator.sh
+        kubectx ${GCE_CONTEXT} && ./config-management/install-config-operator.sh
+    fi
 
+    # External
+    shopt -s nocasematch
+    if [[ ${KOPS_AWS} == y ]]; then
+        kubectx ${AWS_CONTEXT} && ./config-management/install-config-operator.sh
+        kubectx ${AWS_CONTEXT} && ./config-management/install-config-operator.sh
+    fi
+    
+    
+
+## Install Istio
+
+    # GKE
+    shopt -s nocasematch
+    if [[ ${GKE_CLUSTER} == y ]]; then
+        kubectx central && ./hybrid-multicluster/istio-install-single.sh
+    fi
+    
+
+    # GCE
+    shopt -s nocasematch
+    if [[ ${KOPS_GCE} == y ]]; then
+        kubectx ${GCE_CONTEXT} && ./hybrid-multicluster/istio-install-single.sh
+    fi
+
+    # External
+    shopt -s nocasematch
+    if [[ ${KOPS_AWS} == y ]]; then
+        kubectx ${AWS_CONTEXT} && ./hybrid-multicluster/istio-install-single.sh
+    fi
+
+
+## Enable Service Mesh
     #./service-mesh/enable-service-mesh.sh
 
 
+
+## Install Hipster on GKE
+    shopt -s nocasematch
+    if [[ ${DEPLOY_HIPSTER} == y ]]; then
+        ./hybrid-multicluster/deploy-hipster-single.sh
+    fi 
+
+
+
+## Register With Anthos Hub
+    # GCE
     shopt -s nocasematch
     if [[ ${KOPS_GCE} == y ]]; then
         export CONTEXT=$GCE_CONTEXT && ./connect-hub/connect-hub.sh
     fi
+
+    # Remote
     shopt -s nocasematch
     if [[ ${KOPS_AWS} == y ]]; then
         export CONTEXT=$AWS_CONTEXT && ./connect-hub/connect-hub.sh
     fi
     
+
+
 
 
 else

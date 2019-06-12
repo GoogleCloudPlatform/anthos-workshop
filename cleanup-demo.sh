@@ -40,7 +40,11 @@ if [[ ${KOPS_GCE} == y ]]; then
     ./connect-hub/cleanup-remote-gce.sh 
 fi
 
-./gke/cleanup-gke.sh 
+shopt -s nocasematch
+if [[ ${GKE_CLUSTER} == y ]]; then
+    ./gke/cleanup-gke.sh
+fi
+ 
 
 
 rm -rf $WORK_DIR
