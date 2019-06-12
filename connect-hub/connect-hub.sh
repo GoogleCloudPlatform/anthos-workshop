@@ -18,12 +18,11 @@
 export PROJECT=$(gcloud config get-value project)
 export WORK_DIR=${WORK_DIR:="${PWD}/workdir"}
 
-export REMOTE_CLUSTER_NAME_BASE="remote"
+export REMOTE_CLUSTER_NAME_BASE=${CONTEXT:-"remote"}
 export REMOTE_CLUSTER_NAME=$REMOTE_CLUSTER_NAME_BASE.k8s.local
-export REMOTE_KUBECONFIG=$WORK_DIR/remote.context
+export REMOTE_KUBECONFIG=$WORK_DIR/${REMOTE_CLUSTER_NAME_BASE}.context
 
 export GKE_CONNECT_SA=anthos-connect
-export GKE_CONNECT_SA=gke-connect-sa
 export GKE_SA_CREDS=$WORK_DIR/$GKE_CONNECT_SA-creds.json
 
 
@@ -73,5 +72,5 @@ kubectl create clusterrolebinding ksa-admin-binding --clusterrole cluster-admin 
 
 # Generate Token for login process
 echo "###########################"
-echo "Use the following token during login at https://console.cloud.google.com/kubernetes/list"
+echo "Use the following token during login at https://console.cloud.google.com/kubernetes/list for cluster $REMOTE_KUBECONFIG"
 printf "\n$(kubectl --kubeconfig=$REMOTE_KUBECONFIG describe secret $KSA | sed -ne 's/^token: *//p')\n\n" 
