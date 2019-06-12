@@ -17,8 +17,8 @@ export PROJECT=$(gcloud config get-value project)
 # repo 
 cd $HOME
 export GCLOUD_ACCOUNT=$(gcloud config get-value account)
-export REPO_URL=ssh://${GCLOUD_ACCOUNT}@source.developers.google.com:2022/p/${PROJECT}/r/config-repo
-
+export REPO_URL_SSH=ssh://${GCLOUD_ACCOUNT}@source.developers.google.com:2022/p/${PROJECT}/r/config-repo
+export REPO_URL=https://source.developers.google.com/p/${PROJECT}/r/config-repo
 
 git clone https://github.com/cgrant/config-repo config-repo
 cd config-repo
@@ -48,7 +48,7 @@ cat $HOME/.ssh/id_rsa.nomos.pub
 # configure ACM to look for files in this repo 
 kubectx $CENTRAL
 cat $BASE_DIR/config-management/config_sync.yaml | \
-  sed 's|<REPO_URL>|'"$REPO_URL"'|g' | \
+  sed 's|<REPO_URL>|'"$REPO_URL_SSH"'|g' | \
   sed 's|<CLUSTER_NAME>|'"$CENTRAL"'|g' | \
   sed 's|none|ssh|g' | \
   kubectl apply -f -
