@@ -17,7 +17,7 @@ metadata:
     name: config-management
     namespace: config-management-system
 spec:
-  clusterName: <CLUSTER_NAME>
+  clusterName: <CLUSTER_NAME>  
   git:
     syncRepo: <REPO_URL>
     syncBranch: master
