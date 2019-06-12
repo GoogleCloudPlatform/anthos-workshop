@@ -116,7 +116,7 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     shopt -s nocasematch
     if [[ ${GKE_CLUSTER} == y ]]; then
         kubectx central && ./config-management/install-config-operator.sh
-        kubectx central && ./config-management/install-config-operator.sh
+        kubectx central && ./config-management/install-config-sync.sh
     fi
 
 
@@ -124,14 +124,14 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     shopt -s nocasematch
     if [[ ${KOPS_GCE} == y ]]; then
         kubectx ${GCE_CONTEXT} && ./config-management/install-config-operator.sh
-        kubectx ${GCE_CONTEXT} && ./config-management/install-config-operator.sh
+        kubectx ${GCE_CONTEXT} && ./config-management/install-config-sync.sh
     fi
 
     # External
     shopt -s nocasematch
     if [[ ${KOPS_AWS} == y ]]; then
         kubectx ${AWS_CONTEXT} && ./config-management/install-config-operator.sh
-        kubectx ${AWS_CONTEXT} && ./config-management/install-config-operator.sh
+        kubectx ${AWS_CONTEXT} && ./config-management/install-config-sync.sh
     fi
     
     

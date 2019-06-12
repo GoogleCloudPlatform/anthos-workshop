@@ -36,7 +36,7 @@ fi
 
 shopt -s nocasematch
 if [[ ${KOPS_GCE} == y ]]; then
-    export CONTEXT=$AWS_CONTEXT && ./connect-hub/cleanup-hub.sh
+    export CONTEXT=$GCE_CONTEXT && ./connect-hub/cleanup-hub.sh
     ./connect-hub/cleanup-remote-gce.sh 
 fi
 
