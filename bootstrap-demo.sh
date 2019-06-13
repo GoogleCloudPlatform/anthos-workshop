@@ -115,9 +115,11 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
 ## Install Anthos Config Manager
 
     # Repo
+    gcloud services enable sourcerepo.googleapis.com
     source ./config-management/create-repo.sh
     export REPO_URL=$PROJECT_REPO_URL
 
+    cd $HOME/anthos-workshop
     # GKE
     shopt -s nocasematch
     if [[ ${GKE_CLUSTER} == y ]]; then
