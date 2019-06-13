@@ -32,7 +32,7 @@ echo "### "
 
 
 ## Poll the Config Repository
-(set -x; cat $BASE_DIR/config-management/config_sync.yaml | sed 's@<REPO_URL>@'${REPO_URL}@g | sed 's@<CLUSTER_NAME>@'${CLUSTER_NAME}@g | sed 's@    syncBranch: master@    syncBranch: '${REPO_BRANCH}@g | kubectl apply -f -)
+(set -x; cat $BASE_DIR/config-management/config_sync.yaml | sed 's@<REPO_URL>@'${REPO_URL}@g | sed 's@<CLUSTER_NAME>@'${CLUSTER_NAME}@g | sed 's@    syncBranch: master@    syncBranch: '${REPO_BRANCH}@g |sed 's|none|ssh|g' | kubectl apply -f -)
 
 
 
