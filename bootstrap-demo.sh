@@ -114,6 +114,10 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
 
 ## Install Anthos Config Manager
 
+    # Repo
+    source ./config-management/create-repo.sh
+    export REPO_URL=$PROJECT_REPO_URL
+
     # GKE
     shopt -s nocasematch
     if [[ ${GKE_CLUSTER} == y ]]; then
