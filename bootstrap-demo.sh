@@ -117,7 +117,9 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     # Repo
     gcloud services enable sourcerepo.googleapis.com
     source ./config-management/create-repo.sh
-    export REPO_URL=$PROJECT_REPO_URL
+    GCLOUD_ACCOUNT=$(gcloud config get-value account)
+    export REPO_URL=ssh://${GCLOUD_ACCOUNT}@source.developers.google.com:2022/p/${PROJECT}/r/config-repo
+
 
 
     cd $HOME/anthos-workshop
