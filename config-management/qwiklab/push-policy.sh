@@ -14,9 +14,8 @@
 
 
 # push policy to repo
-mkdir namespaces/hipster2
 
-cat <<EOF > namespaces/hipster2/meshpolicy.yaml
+cat <<EOF > cluster/meshpolicy.yaml
 apiVersion: authentication.istio.io/v1alpha1
 kind: MeshPolicy
 metadata:

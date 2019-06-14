@@ -16,9 +16,11 @@ export PROJECT=$(gcloud config get-value project)
 
 # repo 
 cd $HOME
+export CLUSTER_NAME="central" #TODO 
 export GCLOUD_ACCOUNT=$(gcloud config get-value account)
 export REPO_URL_SSH=ssh://${GCLOUD_ACCOUNT}@source.developers.google.com:2022/p/${PROJECT}/r/config-repo
 export REPO_URL=https://source.developers.google.com/p/${PROJECT}/r/config-repo
+export REPO_BRANCH="master"
 
 git clone https://github.com/cgrant/config-repo config-repo
 cd config-repo
@@ -36,19 +38,20 @@ ssh-keygen -t rsa -b 4096 \
 -f $HOME/.ssh/id_rsa.nomos
 
 # apply token to the cluster (using central only) 
-kubectx central
 kubectl create secret generic git-creds \
 --namespace=config-management-system \
 --from-file=ssh=$HOME/.ssh/id_rsa.nomos
+
+# install config sync - tell ACM to poll this repo
+## Poll the Config Repository
+cat ~/anthos-workshop/config-management/config_sync.yaml | \
+  sed 's|    syncBranch: master|    syncBranch: '"$REPO_BRANCH"'|g' | \
+  sed 's|<REPO_URL>|'"$REPO_URL_SSH"'|g' | \
+  sed 's|<CLUSTER_NAME>|'"$CLUSTER_NAME"'|g' | \
+  sed 's|none|ssh|g' | \
+  kubectl apply -f - 
 
 # user needs key to register to GCR 
 echo "-------- YOUR SSH KEY ----------- "
 cat $HOME/.ssh/id_rsa.nomos.pub
 
-# configure ACM to look for files in this repo 
-kubectx $CENTRAL
-cat $BASE_DIR/config-management/config_sync.yaml | \
-  sed 's|<REPO_URL>|'"$REPO_URL_SSH"'|g' | \
-  sed 's|<CLUSTER_NAME>|'"$CENTRAL"'|g' | \
-  sed 's|none|ssh|g' | \
-  kubectl apply -f -
