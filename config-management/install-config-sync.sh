@@ -20,7 +20,7 @@
 export CLUSTER_NAME=$(kubectl config current-context)
 export REPO_URL=${REPO_URL:-"https://github.com/cgrant/policy-repo"}
 export REPO_BRANCH=${REPO_BRANCH:-"master"}
-
+export AUTH_TYPE=ssh
 
 export BASE_DIR=${BASE_DIR:="${PWD}/.."}
 echo "BASE_DIR set to $BASE_DIR"
@@ -32,7 +32,8 @@ echo "### "
 
 
 ## Poll the Config Repository
-(set -x; cat $BASE_DIR/config-management/config_sync.yaml | sed 's@<REPO_URL>@'${REPO_URL}@g | sed 's@<CLUSTER_NAME>@'${CLUSTER_NAME}@g | sed 's@    syncBranch: master@    syncBranch: '${REPO_BRANCH}@g |sed 's|none|ssh|g' | kubectl apply -f -)
+(set -x; cat $BASE_DIR/config-management/config_sync.yaml | sed 's@    syncBranch: master@    syncBranch: '${REPO_BRANCH}@g | sed 's@none@'${AUTH_TYPE}@g | sed 's@<REPO_URL>@'${REPO_URL}@g | sed 's@<CLUSTER_NAME>@'${CLUSTER_NAME}@g  | kubectl apply -f -)
+
 
 
 
