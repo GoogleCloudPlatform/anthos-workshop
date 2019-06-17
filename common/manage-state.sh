@@ -19,6 +19,7 @@ function write_state() {
     echo "export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" >> $WORK_DIR/state.env
     echo "export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" >> $WORK_DIR/state.env
     echo "export AWS_CONTEXT=${AWS_CONTEXT}" >> $WORK_DIR/state.env
+    echo "export AWS_RND=${AWS_RND}" >> $WORK_DIR/state.env
 
     echo "export REPO_URL=${REPO_URL}" >> $WORK_DIR/state.env
     echo "export REPO_BRANCH=${REPO_BRANCH}" >> $WORK_DIR/state.env
