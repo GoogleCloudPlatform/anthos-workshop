@@ -62,15 +62,21 @@ fi
     write_state
 
 
- # External
+# Provision
     shopt -s nocasematch
     if [[ ${KOPS_AWS} == y ]]; then
         ./connect-hub/provision-remote-aws.sh &> ${WORK_DIR}/provision-aws-${AWS_CONTEXT}.log &
+        wait
     fi
 
-    wait
 
-       # External
+# Istio
+    shopt -s nocasematch
+    if [[ ${KOPS_AWS} == y ]]; then
+        kubectx ${AWS_CONTEXT} && ./hybrid-multicluster/istio-install-single.sh
+    fi
+
+# Config Management
     shopt -s nocasematch
     if [[ ${KOPS_AWS} == y ]]; then
         kubectx ${AWS_CONTEXT} && kubectl create secret generic git-creds --namespace=config-management-system --from-file=ssh=$HOME/.ssh/id_rsa.nomos  
@@ -79,11 +85,6 @@ fi
     fi
     
 
-        # External
-    shopt -s nocasematch
-    if [[ ${KOPS_AWS} == y ]]; then
-        kubectx ${AWS_CONTEXT} && ./hybrid-multicluster/istio-install-single.sh
-    fi
 
   # Remote
     shopt -s nocasematch

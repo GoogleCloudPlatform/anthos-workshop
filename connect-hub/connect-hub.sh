@@ -49,10 +49,12 @@ gcloud projects add-iam-policy-binding $PROJECT \
     --member="serviceAccount:$GKE_CONNECT_SA@$PROJECT.iam.gserviceaccount.com" \
     --role="roles/gkehub.connect"
 
-# Create and download a key
-gcloud iam service-accounts keys create $GKE_SA_CREDS --project=$PROJECT \
-  --iam-account=$GKE_CONNECT_SA@$PROJECT.iam.gserviceaccount.com 
-
+FILE=$GKE_SA_CREDS
+if ! test -f "$FILE"; then
+    # Create and download a key
+    gcloud iam service-accounts keys create $GKE_SA_CREDS --project=$PROJECT \
+    --iam-account=$GKE_CONNECT_SA@$PROJECT.iam.gserviceaccount.com 
+fi
 
 
 ### Connect Cluster to Hub
