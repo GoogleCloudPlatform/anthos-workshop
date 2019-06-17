@@ -24,7 +24,7 @@ export PATH=$PATH:$HOME/.local/bin
 export REMOTE_CLUSTER_NAME_BASE=${AWS_CONTEXT:-"external"}
 
 export REMOTE_CLUSTER_NAME=$REMOTE_CLUSTER_NAME_BASE.k8s.local
-export KOPS_STORE=s3://$PROJECT-kops-$REMOTE_CLUSTER_NAME_BASE-11
+export KOPS_STORE=s3://$PROJECT-kops-$REMOTE_CLUSTER_NAME_BASE-$AWS_RND
 
 kops delete cluster --name $REMOTE_CLUSTER_NAME --state $KOPS_STORE --yes
 

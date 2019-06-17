@@ -21,5 +21,6 @@ function write_state() {
     echo "export AWS_CONTEXT=${AWS_CONTEXT}" >> $WORK_DIR/state.env
 
     echo "export REPO_URL=${REPO_URL}" >> $WORK_DIR/state.env
+    echo "export REPO_BRANCH=${REPO_BRANCH}" >> $WORK_DIR/state.env
 }
 

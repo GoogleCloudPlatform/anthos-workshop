@@ -62,6 +62,9 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
         # AWS Context name
         read -e -p 'AWS_CONTEXT [external]:' key
         export AWS_CONTEXT=${key:-"external"} 
+
+        # AWS Uniquee Bucket Postfix
+        export AWS_RND=${AWS_RND:-"1"} 
         
     fi
    
