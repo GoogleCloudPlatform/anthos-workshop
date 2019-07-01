@@ -4,6 +4,11 @@ function load_state() {
     source $WORK_DIR/state.env
 }
 
+function load_profile() {
+    FILE=$1.profile
+    source $BASE_DIR/common/$FILE
+}
+
 function write_state() {
     mkdir -p $WORK_DIR
     touch $WORK_DIR/state.env

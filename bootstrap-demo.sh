@@ -16,8 +16,14 @@
 
 # Variables
 
-# REQUIRES 
-## AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
+
+## Enable quite profile mode
+while getopts "p:" OPTION
+do
+	case $OPTION in
+		p) PROFILE=$OPTARG;;
+	esac
+done
 
 
 
@@ -30,27 +36,47 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     source $BASE_DIR/common/manage-state.sh 
     load_state
 
-    # Kops on GCE?
-    read -e -p "Create GKE Cluster? (Y/N) [y]:" gke 
-    export GKE_CLUSTER=${gke:-"y"}
+    if [[ $PROFILE ]]; then
+        ## Load Profile
+       load_profile $PROFILE
+    else
+        ## Get user defined Profile
 
-    # Kops on GCE?
-    read -e -p "Kops on GCE? (Y/N) [${KOPS_GCE:-$KOPS_GCE}]:" kopsg 
-    export KOPS_GCE=${kopsg:-"$KOPS_GCE"}
+        # Kops on GCE?
+        read -e -p "Create GKE Cluster? (Y/N) [y]:" gke  
+        export GKE_CLUSTER=${gke:-"y"}
 
-    shopt -s nocasematch
-    if [[ ${KOPS_GCE} == y ]]; then
-        # GCE Context name
-        read -e -p 'GCE_CONTEXT [remote]:' key
-        export GCE_CONTEXT=${key:-"remote"} 
+        # Kops on GCE?
+        read -e -p "Kops on GCE? (Y/N) [${KOPS_GCE:-$KOPS_GCE}]:" kopsg 
+        export KOPS_GCE=${kopsg:-"$KOPS_GCE"}
+
+        shopt -s nocasematch
+        if [[ ${KOPS_GCE} == y ]]; then
+            # GCE Context name
+            read -e -p 'GCE_CONTEXT [remote]:' key
+            export GCE_CONTEXT=${key:-"remote"} 
+        fi
+
+        # Kops on AWS?
+        read -e -p "Kops on AWS? (Y/N) [${KOPS_AWS:-$KOPS_AWS}]:" kopsa 
+        export KOPS_AWS=${kopsa:-"$KOPS_AWS"}
+        shopt -s nocasematch
+        
+
+        # Config repo source 
+    
+        read -e -p "Config Repo Source [https://github.com/cgrant/policy-repo]:" reposource 
+        export REPO_URL=${reposource:-"$REPO_URL"}
+        read -e -p "Config Repo Branch [master]:" repobranch
+        export REPO_BRANCH=${repobranch:-"$REPO_BRANCH"}
+
+        # Deploy Hipster?
+        read -e -p "Deploy hipster with kubectl? (Y/N) [y]:" deployhip 
+        export DEPLOY_HIPSTER=${deployhip:-"y"}
     fi
 
-    # Kops on AWS?
-    read -e -p "Kops on AWS? (Y/N) [${KOPS_AWS:-$KOPS_AWS}]:" kopsa 
-    export KOPS_AWS=${kopsa:-"$KOPS_AWS"}
-    shopt -s nocasematch
+    ## Get user provided Keys
     if [[ ${KOPS_AWS} == y ]]; then
-
         # AWS ID
         read -e -p "AWS_ACCESS_KEY_ID [${AWS_ACCESS_KEY_ID:-$AWS_ACCESS_KEY_ID}]:" id 
         export AWS_ACCESS_KEY_ID=${id:-"$AWS_ACCESS_KEY_ID"}
@@ -64,29 +90,13 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
         export AWS_CONTEXT=${key:-"external"} 
 
         # AWS Uniquee Bucket Postfix
-        export AWS_RND=${AWS_RND:-"1"} 
-        
+        export AWS_RND=${AWS_RND:-"1"}    
     fi
-   
-    # Config repo source 
-  
 
-    read -e -p "Config Repo Source [https://github.com/cgrant/policy-repo]:" reposource 
-    export REPO_URL=${reposource:-"$REPO_URL"}
-    read -e -p "Config Repo Branch [master]:" repobranch
-    export REPO_BRANCH=${repobranch:-"$REPO_BRANCH"}
-
-
-    # Deploy Hipster?
-    read -e -p "Deploy hipster with kubectl? (Y/N) [y]:" deployhip 
-    export DEPLOY_HIPSTER=${deployhip:-"y"}
-
-   
 
     write_state
 
 
-    
     echo "WORK_DIR set to $WORK_DIR"
     gcloud config set project $PROJECT
 
