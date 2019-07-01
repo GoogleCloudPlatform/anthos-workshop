@@ -69,8 +69,8 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     fi
    
     # Config repo source 
-    yes y | ssh-keygen -t rsa -b 4096 -C "$GCLOUD_ACCOUNT" -N '' -f $HOME/.ssh/id_rsa.nomos
-    
+  
+
     read -e -p "Config Repo Source [https://github.com/cgrant/policy-repo]:" reposource 
     export REPO_URL=${reposource:-"$REPO_URL"}
     read -e -p "Config Repo Branch [master]:" repobranch
@@ -122,6 +122,7 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
 ## Install Anthos Config Manager
 
     # Repo
+    yes y | ssh-keygen -t rsa -b 4096 -C "$GCLOUD_ACCOUNT" -N '' -f $HOME/.ssh/id_rsa.nomos>/dev/null
     gcloud services enable sourcerepo.googleapis.com
     source ./config-management/create-repo.sh
     GCLOUD_ACCOUNT=$(gcloud config get-value account)
