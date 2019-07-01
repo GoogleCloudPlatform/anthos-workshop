@@ -188,6 +188,8 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     fi 
 
 
+## Enable Service Mesh
+    ./service-mesh/enable-service-mesh.sh
 
 ## Register With Anthos Hub
     # GCE
@@ -203,8 +205,7 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     fi
     
 
-## Enable Service Mesh
-    #./service-mesh/enable-service-mesh.sh
+
 
 
 
