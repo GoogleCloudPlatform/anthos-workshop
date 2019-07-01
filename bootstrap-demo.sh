@@ -69,6 +69,8 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     fi
    
     # Config repo source 
+    yes y | ssh-keygen -t rsa -b 4096 -C "$GCLOUD_ACCOUNT" -N '' -f $HOME/.ssh/id_rsa.nomos
+    
     read -e -p "Config Repo Source [https://github.com/cgrant/policy-repo]:" reposource 
     export REPO_URL=${reposource:-"$REPO_URL"}
     read -e -p "Config Repo Branch [master]:" repobranch
@@ -111,6 +113,8 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     shopt -s nocasematch
     if [[ ${KOPS_AWS} == y ]]; then
         ./connect-hub/provision-remote-aws.sh &> ${WORK_DIR}/provision-aws-${AWS_CONTEXT}.log &
+
+        
     fi
 
     wait
@@ -175,10 +179,6 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     fi
 
 
-## Enable Service Mesh
-    #./service-mesh/enable-service-mesh.sh
-
-
 
 ## Install Hipster on GKE
     shopt -s nocasematch
@@ -201,6 +201,10 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
         export CONTEXT=$AWS_CONTEXT && ./connect-hub/connect-hub.sh
     fi
     
+
+## Enable Service Mesh
+    #./service-mesh/enable-service-mesh.sh
+
 
 
 
