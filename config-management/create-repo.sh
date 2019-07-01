@@ -1,4 +1,8 @@
 
+export PROJECT=$(gcloud config get-value project)
+export EMAIL=$(gcloud config get-value account)
+git config --global user.email "$EMAIL"
+git config --global user.name "$USER"
 
 export PROJECT=$(gcloud config get-value project)
 export REPO_URL=${REPO_URL:-"https://github.com/cgrant/hipster"}

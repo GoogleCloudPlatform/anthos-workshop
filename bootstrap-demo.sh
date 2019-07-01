@@ -62,6 +62,16 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
         export KOPS_AWS=${kopsa:-"$KOPS_AWS"}
         shopt -s nocasematch
         
+        if [[ ${KOPS_AWS} == y ]]; then
+
+        # AWS Context name
+        read -e -p 'AWS_CONTEXT [external]:' key
+        export AWS_CONTEXT=${key:-"external"} 
+
+        # AWS Uniquee Bucket Postfix
+        export AWS_RND=${AWS_RND:-"1"}    
+        fi
+        
 
         # Config repo source 
     
@@ -85,12 +95,6 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
         read -e -p "AWS_SECRET_ACCESS_KEY [${AWS_SECRET_ACCESS_KEY:-$AWS_SECRET_ACCESS_KEY}]:" key 
         export AWS_SECRET_ACCESS_KEY=${key:-"$AWS_SECRET_ACCESS_KEY"}
 
-        # AWS Context name
-        read -e -p 'AWS_CONTEXT [external]:' key
-        export AWS_CONTEXT=${key:-"external"} 
-
-        # AWS Uniquee Bucket Postfix
-        export AWS_RND=${AWS_RND:-"1"}    
     fi
 
 
@@ -132,12 +136,14 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
 ## Install Anthos Config Manager
 
     # Repo
+  
+
     yes y | ssh-keygen -t rsa -b 4096 -C "$GCLOUD_ACCOUNT" -N '' -f $HOME/.ssh/id_rsa.nomos>/dev/null
     gcloud services enable sourcerepo.googleapis.com
     source ./config-management/create-repo.sh
+
     GCLOUD_ACCOUNT=$(gcloud config get-value account)
     export REPO_URL=ssh://${GCLOUD_ACCOUNT}@source.developers.google.com:2022/p/${PROJECT}/r/config-repo
-
 
 
     cd $HOME/anthos-workshop
