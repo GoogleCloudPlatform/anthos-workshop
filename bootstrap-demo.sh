@@ -150,6 +150,7 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     # GKE
     shopt -s nocasematch
     if [[ ${GKE_CLUSTER} == y ]]; then
+        kubectx central && kubectl create ns config-management-system
         kubectx central && kubectl create secret generic git-creds --namespace=config-management-system --from-file=ssh=$HOME/.ssh/id_rsa.nomos
         kubectx central && ./config-management/install-config-operator.sh
         kubectx central && ./config-management/install-config-sync.sh
@@ -159,6 +160,7 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     # GCE
     shopt -s nocasematch
     if [[ ${KOPS_GCE} == y ]]; then
+        kubectx ${GCE_CONTEXT} && kubectl create ns config-management-system
         kubectx ${GCE_CONTEXT} && kubectl create secret generic git-creds --namespace=config-management-system --from-file=ssh=$HOME/.ssh/id_rsa.nomos    
         kubectx ${GCE_CONTEXT} && ./config-management/install-config-operator.sh
         kubectx ${GCE_CONTEXT} && ./config-management/install-config-sync.sh
@@ -167,10 +169,12 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     # External
     shopt -s nocasematch
     if [[ ${KOPS_AWS} == y ]]; then
+        kubectx ${AWS_CONTEXT} && kubectl create ns config-management-system
         kubectx ${AWS_CONTEXT} && kubectl create secret generic git-creds --namespace=config-management-system --from-file=ssh=$HOME/.ssh/id_rsa.nomos  
         kubectx ${AWS_CONTEXT} && ./config-management/install-config-operator.sh
         kubectx ${AWS_CONTEXT} && ./config-management/install-config-sync.sh
     fi
+    
     
     
 
