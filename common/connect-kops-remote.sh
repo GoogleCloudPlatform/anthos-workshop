@@ -14,6 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# This script to establish Cloud Shell kubectl connectivity to clusters created
+# outside of that Cloud Shell session, to both a GKE cluster, and a Kops
+# cluster.
+
 source ./env
 source ./common/install-tools.sh
 export WORK_DIR=${WORK_DIR:="${PWD}/workdir"}
@@ -26,6 +30,7 @@ export CLUSTER_ZONE=us-central1-b
 
 gcloud container clusters get-credentials $CLUSTER_NAME --zone $CLUSTER_ZONE
 
+# This renames the kubectl context to something simpler.
 kubectx ${CLUSTER_NAME}=gke_${PROJECT}_${CLUSTER_ZONE}_${CLUSTER_NAME}
 
 # Connect to remote cluster
@@ -43,8 +48,9 @@ export KOPS_STORE=gs://$PROJECT-kops-$REMOTE_CLUSTER_NAME_BASE
 export STUDENT=$(gcloud config get-value account)
 gcloud projects add-iam-policy-binding $PROJECT --member user:$STUDENT --role roles/storage.objectViewer
 
-kops export kubecfg --name $REMOTE_CLUSTER_NAME --state=gs://$PROJECT-kops-remote
+kops export kubecfg --name $REMOTE_CLUSTER_NAME --state=$KOPS_STORE
 
+# This renames the kubectl context to something simpler.
 kubectx $REMOTE_CLUSTER_NAME_BASE=$REMOTE_CLUSTER_NAME && kubectx $REMOTE_CLUSTER_NAME_BASE
 
 # Set up firewall to access clusters from Cloud Shell
