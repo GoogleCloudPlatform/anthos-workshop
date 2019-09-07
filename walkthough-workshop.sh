@@ -29,7 +29,7 @@ pe "gcloud services enable \
 # Initial build
 pe "source ./env"
 pe "source ./bootstrap-workshop.sh"
-pe "kubectx remote"
+pe "kubectx onprem"
 pe "kubectl get nodes"
 
 # Environment
@@ -51,7 +51,7 @@ pe "export REMOTE_KUBECONFIG=$WORK_DIR/remote.context"
 
 pe "export GKE_CONNECT_SA=anthos-connect"
 pe "export GKE_SA_CREDS=$WORK_DIR/$GKE_CONNECT_SA-creds.json"
-pe "kubectx remote"
+pe "kubectx onprem"
 
 # Cluster registration
 pe "gcloud alpha container hub register-cluster $REMOTE_CLUSTER_NAME_BASE \
@@ -93,12 +93,12 @@ pe "ssh-keygen -t rsa -b 4096 \
 -N '' \
 -f $HOME/.ssh/id_rsa.nomos"
 
-pe "kubectx central"
+pe "kubectx gcp"
 pe "kubectl create secret generic git-creds \
 --namespace=config-management-system \
 --from-file=ssh=$HOME/.ssh/id_rsa.nomos"
 
-pe "kubectx remote"
+pe "kubectx onprem"
 pe "kubectl create secret generic git-creds \
 --namespace=config-management-system \
 --from-file=ssh=$HOME/.ssh/id_rsa.nomos"
@@ -113,7 +113,7 @@ pe "echo $REPO_URL"
 pe "cat $BASE_DIR/config-management/config_sync.yaml"
 
 pe "export REMOTE=remote"
-pe "export CENTRAL=central"
+pe "export CENTRAL=gcp"
 pe "REPO_URL=ssh://${GCLOUD_ACCOUNT}@source.developers.google.com:2022/p/${PROJECT}/r/config-repo"
 
 pe "kubectx $REMOTE"
@@ -139,7 +139,7 @@ metadata:
   name: checkout
 EOF"
 
-pe "tree ." 
+pe "tree ."
 
 pe "export EMAIL=$(gcloud config get-value account)"
 pe "git config --global user.email \"$EMAIL\""
@@ -148,7 +148,7 @@ pe "git config --global user.name \"$USER\""
 pe "git add . && git commit -m 'adding checkout namespace'"
 pe "git push origin master"
 
-pe "kubectl --context remote delete ns checkout"
+pe "kubectl --context onprem delete ns checkout"
 pe "cd $HOME/config-repo"
 pe "mkdir clusterregistry"
 
@@ -166,7 +166,7 @@ pe "cat <<EOF > clusterregistry/cluster-central.yaml
 kind: Cluster
 apiVersion: clusterregistry.k8s.io/v1alpha1
 metadata:
-  name: central
+  name: gcp
   labels:
     env: central
     lifecycle: prod
@@ -203,26 +203,26 @@ p "============================================================"
 
 pe "cd $BASE_DIR"
 pe "./hybrid-multicluster/istio-dns.sh"
-pe "kubectl --context central -n kube-system get configmap kube-dns -o json | jq '.data' "
-pe "kubectl --context central -n istio-system get configmap coredns -o json | jq -r '.data.Corefile'"
+pe "kubectl --context gcp -n kube-system get configmap kube-dns -o json | jq '.data' "
+pe "kubectl --context gcp -n istio-system get configmap coredns -o json | jq -r '.data.Corefile'"
 pe "./hybrid-multicluster/istio-deploy-hipster.sh"
 
-pe "kubectl --context central -n hipster2 get all"
-pe "kubectl --context remote -n hipster1 get all"
+pe "kubectl --context gcp -n hipster2 get all"
+pe "kubectl --context onprem -n hipster1 get all"
 
-pe "kubectl --context central -n hipster2 get deploy frontend -ojson | jq -r '[.spec.template.spec.containers[].env[]]'"
-pe "kubectl --context remote -n hipster1 get deploy checkoutservice -ojson | jq -r '[.spec.template.spec.containers[].env[]]'"
+pe "kubectl --context gcp -n hipster2 get deploy frontend -ojson | jq -r '[.spec.template.spec.containers[].env[]]'"
+pe "kubectl --context onprem -n hipster1 get deploy checkoutservice -ojson | jq -r '[.spec.template.spec.containers[].env[]]'"
 
-pe "kubectl --context central -n hipster2 get serviceentries"
-pe "kubectl --context remote -n hipster1 get serviceentries"
+pe "kubectl --context gcp -n hipster2 get serviceentries"
+pe "kubectl --context onprem -n hipster1 get serviceentries"
 
-pe "kubectl --context central -n hipster2 get serviceentry checkoutservice-entry -ojson | jq '.spec.endpoints'"
-pe "kubectl --context central -n hipster2 get gateway -ojson | jq '.items[].spec'"
-pe "kubectl --context central get -n istio-system service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}'"
+pe "kubectl --context gcp -n hipster2 get serviceentry checkoutservice-entry -ojson | jq '.spec.endpoints'"
+pe "kubectl --context gcp -n hipster2 get gateway -ojson | jq '.items[].spec'"
+pe "kubectl --context gcp get -n istio-system service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}'"
 
 p "============================================================"
 
 pe "./hybrid-multicluster/istio-connect.sh"
 pe "./hybrid-multicluster/istio-migrate-hipster.sh"
 
-pe "kubectl --context central -n hipster2 get deploy frontend -ojson | jq -r '[.spec.template.spec.containers[].env[]]'"
+pe "kubectl --context gcp -n hipster2 get deploy frontend -ojson | jq -r '[.spec.template.spec.containers[].env[]]'"

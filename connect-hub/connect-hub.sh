@@ -18,7 +18,7 @@
 export PROJECT=$(gcloud config get-value project)
 export WORK_DIR=${WORK_DIR:="${PWD}/workdir"}
 
-export REMOTE_CLUSTER_NAME_BASE=${CONTEXT:-"remote"}
+export REMOTE_CLUSTER_NAME_BASE=${CONTEXT:-"onprem"}
 export REMOTE_CLUSTER_NAME=$REMOTE_CLUSTER_NAME_BASE.k8s.local
 export REMOTE_KUBECONFIG=$WORK_DIR/${REMOTE_CLUSTER_NAME_BASE}.context
 
@@ -53,7 +53,7 @@ FILE=$GKE_SA_CREDS
 if ! test -f "$FILE"; then
     # Create and download a key
     gcloud iam service-accounts keys create $GKE_SA_CREDS --project=$PROJECT \
-    --iam-account=$GKE_CONNECT_SA@$PROJECT.iam.gserviceaccount.com 
+    --iam-account=$GKE_CONNECT_SA@$PROJECT.iam.gserviceaccount.com
 fi
 
 
@@ -74,4 +74,4 @@ kubectl create clusterrolebinding ksa-admin-binding --clusterrole cluster-admin 
 # Generate Token for login process
 echo "###########################"
 echo "Use the following token during login at https://console.cloud.google.com/kubernetes/list for cluster $REMOTE_KUBECONFIG"
-printf "\n$(kubectl --kubeconfig=$REMOTE_KUBECONFIG describe secret $KSA | sed -ne 's/^token: *//p')\n\n" 
+printf "\n$(kubectl --kubeconfig=$REMOTE_KUBECONFIG describe secret $KSA | sed -ne 's/^token: *//p')\n\n"

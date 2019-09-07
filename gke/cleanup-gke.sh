@@ -15,7 +15,7 @@
 # limitations under the License.
 
 # Variables
-export CLUSTER_NAME="central"
+export CLUSTER_NAME="gcp"
 export CLUSTER_ZONE="us-central1-b"
 
 

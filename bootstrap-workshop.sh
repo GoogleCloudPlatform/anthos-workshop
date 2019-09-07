@@ -16,7 +16,7 @@
 
 # Variables
 
-if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then 
+if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
 
     export PROJECT=$(gcloud config get-value project)
     export BASE_DIR=${BASE_DIR:="${PWD}"}
@@ -27,14 +27,14 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
 
     source ./common/settings.env
     ./common/install-tools.sh
-    echo -e "\nMultiple tasks are running asynchronously to setup your environment.  It may appear frozen, but you can check the logs in $WORK_DIR for additional details in another terminal window." 
+    echo -e "\nMultiple tasks are running asynchronously to setup your environment.  It may appear frozen, but you can check the logs in $WORK_DIR for additional details in another terminal window."
 
     ./gke/provision-gke.sh &> ${WORK_DIR}/provision-gke.log &
     ./connect-hub/provision-remote-gce.sh &> ${WORK_DIR}/provision-remote.log &
     wait
 
-    kubectx central && ./config-management/install-config-operator.sh
-    kubectx remote && ./config-management/install-config-operator.sh
+    kubectx gcp && ./config-management/install-config-operator.sh
+    kubectx onprem && ./config-management/install-config-operator.sh
 
     ./hybrid-multicluster/istio-install.sh
 

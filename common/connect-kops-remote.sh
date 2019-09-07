@@ -25,7 +25,7 @@ export PATH=$PATH:$WORK_DIR/bin
 
 # Connect to central cluster
 
-export CLUSTER_NAME=central
+export CLUSTER_NAME=gcp
 export CLUSTER_ZONE=us-central1-b
 
 gcloud container clusters get-credentials $CLUSTER_NAME --zone $CLUSTER_ZONE
@@ -40,7 +40,7 @@ curl -sLO https://github.com/kubernetes/kops/releases/download/$(curl -s https:/
 chmod +x kops-linux-amd64
 mv kops-linux-amd64 $WORK_DIR/bin/kops
 
-export REMOTE_CLUSTER_NAME_BASE=remote
+export REMOTE_CLUSTER_NAME_BASE=onprem
 export REMOTE_CLUSTER_NAME=$REMOTE_CLUSTER_NAME_BASE.k8s.local
 export KOPS_STORE=gs://$PROJECT-kops-$REMOTE_CLUSTER_NAME_BASE
 

@@ -29,11 +29,11 @@ export ISTIO_CONFIG_DIR="$BASE_DIR/hybrid-multicluster/istio"
 
 # Install Istio on central
 # Change context
-kubectx central
+kubectx gcp
 # Create istio-system namespace
 kubectl create namespace istio-system
 # Tiller service account
-kubectl --context central apply -f ${WORK_DIR}/istio-${ISTIO_VERSION}/install/kubernetes/helm/helm-service-account.yaml
+kubectl --context gcp apply -f ${WORK_DIR}/istio-${ISTIO_VERSION}/install/kubernetes/helm/helm-service-account.yaml
 # Install tiller
 helm init --service-account tiller --wait
 
@@ -41,7 +41,7 @@ helm init --service-account tiller --wait
 #until timeout 10 helm version; do sleep 10; done
 
 # Create a secret with the sample certs for multicluster deployment
-kubectl --context central create secret generic cacerts -n istio-system \
+kubectl --context gcp create secret generic cacerts -n istio-system \
 --from-file=${WORK_DIR}/istio-${ISTIO_VERSION}/samples/certs/ca-cert.pem \
 --from-file=${WORK_DIR}/istio-${ISTIO_VERSION}/samples/certs/ca-key.pem \
 --from-file=${WORK_DIR}/istio-${ISTIO_VERSION}/samples/certs/root-cert.pem \
@@ -57,7 +57,7 @@ until [ $(kubectl get crds | grep 'istio.io\|certmanager.k8s.io' | wc -l) = 53 ]
 echo "Istio CRDs installed" && kubectl get crds | grep 'istio.io\|certmanager.k8s.io' | wc -l
 
 # Create a secret for kiali username: 'admin' and password 'password'
-kubectl --context central apply -f ${ISTIO_CONFIG_DIR}/istio-multicluster/kiali-secret.yaml
+kubectl --context gcp apply -f ${ISTIO_CONFIG_DIR}/istio-multicluster/kiali-secret.yaml
 
 # Install Istio
 helm install ${WORK_DIR}/istio-${ISTIO_VERSION}/install/kubernetes/helm/istio --name istio --namespace istio-system \
@@ -66,11 +66,11 @@ helm install ${WORK_DIR}/istio-${ISTIO_VERSION}/install/kubernetes/helm/istio --
 
 # Install Istio on remote cluster
 # Change context
-kubectx remote
+kubectx onprem
 # Create istio-system namespace
 kubectl create namespace istio-system
 # Tiller service account
-kubectl --context remote apply -f ${WORK_DIR}/istio-${ISTIO_VERSION}/install/kubernetes/helm/helm-service-account.yaml
+kubectl --context onprem apply -f ${WORK_DIR}/istio-${ISTIO_VERSION}/install/kubernetes/helm/helm-service-account.yaml
 # Install tiller
 helm init --service-account tiller --wait
 
@@ -78,7 +78,7 @@ helm init --service-account tiller --wait
 #until timeout 10 helm version; do sleep 10; done
 
 # Create a secret with the sample certs for multicluster deployment
-kubectl --context remote create secret generic cacerts -n istio-system \
+kubectl --context onprem create secret generic cacerts -n istio-system \
 --from-file=${WORK_DIR}/istio-${ISTIO_VERSION}/samples/certs/ca-cert.pem \
 --from-file=${WORK_DIR}/istio-${ISTIO_VERSION}/samples/certs/ca-key.pem \
 --from-file=${WORK_DIR}/istio-${ISTIO_VERSION}/samples/certs/root-cert.pem \
@@ -94,7 +94,7 @@ until [ $(kubectl get crds | grep 'istio.io\|certmanager.k8s.io' | wc -l) = 53 ]
 echo "Istio CRDs installed" && kubectl get crds | grep 'istio.io\|certmanager.k8s.io' | wc -l
 
 # Create a secret for kiali username: 'admin' and password 'password'
-kubectl --context remote apply -f ${ISTIO_CONFIG_DIR}/istio-multicluster/kiali-secret.yaml
+kubectl --context onprem apply -f ${ISTIO_CONFIG_DIR}/istio-multicluster/kiali-secret.yaml
 
 # Install Istio
 helm install ${WORK_DIR}/istio-${ISTIO_VERSION}/install/kubernetes/helm/istio --name istio --namespace istio-system \

@@ -27,13 +27,13 @@ done
 
 
 
-if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then 
+if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
 
     export PROJECT=$(gcloud config get-value project)
     export BASE_DIR=${BASE_DIR:="${PWD}"}
     export WORK_DIR=${WORK_DIR:="${BASE_DIR}/workdir"}
 
-    source $BASE_DIR/common/manage-state.sh 
+    source $BASE_DIR/common/manage-state.sh
     load_state
 
     if [[ $PROFILE ]]; then
@@ -43,56 +43,56 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
         ## Get user defined Profile
 
         # Kops on GCE?
-        read -e -p "Create GKE Cluster? (Y/N) [y]:" gke  
+        read -e -p "Create GKE Cluster? (Y/N) [y]:" gke
         export GKE_CLUSTER=${gke:-"y"}
 
         # Kops on GCE?
-        read -e -p "Kops on GCE? (Y/N) [${KOPS_GCE:-$KOPS_GCE}]:" kopsg 
+        read -e -p "Kops on GCE? (Y/N) [${KOPS_GCE:-$KOPS_GCE}]:" kopsg
         export KOPS_GCE=${kopsg:-"$KOPS_GCE"}
 
         shopt -s nocasematch
         if [[ ${KOPS_GCE} == y ]]; then
             # GCE Context name
-            read -e -p 'GCE_CONTEXT [remote]:' key
-            export GCE_CONTEXT=${key:-"remote"} 
+            read -e -p 'GCE_CONTEXT [onprem]:' key
+            export GCE_CONTEXT=${key:-"onprem"}
         fi
 
         # Kops on AWS?
-        read -e -p "Kops on AWS? (Y/N) [${KOPS_AWS:-$KOPS_AWS}]:" kopsa 
+        read -e -p "Kops on AWS? (Y/N) [${KOPS_AWS:-$KOPS_AWS}]:" kopsa
         export KOPS_AWS=${kopsa:-"$KOPS_AWS"}
         shopt -s nocasematch
-        
+
         if [[ ${KOPS_AWS} == y ]]; then
 
         # AWS Context name
         read -e -p 'AWS_CONTEXT [external]:' key
-        export AWS_CONTEXT=${key:-"external"} 
+        export AWS_CONTEXT=${key:-"external"}
 
         # AWS Uniquee Bucket Postfix
-        export AWS_RND=${AWS_RND:-"1"}    
+        export AWS_RND=${AWS_RND:-"1"}
         fi
-        
 
-        # Config repo source 
-    
-        read -e -p "Config Repo Source [https://github.com/cgrant/policy-repo]:" reposource 
+
+        # Config repo source
+
+        read -e -p "Config Repo Source [https://github.com/cgrant/policy-repo]:" reposource
         export REPO_URL=${reposource:-"$REPO_URL"}
         read -e -p "Config Repo Branch [master]:" repobranch
         export REPO_BRANCH=${repobranch:-"$REPO_BRANCH"}
 
         # Deploy Hipster?
-        read -e -p "Deploy hipster with kubectl? (Y/N) [y]:" deployhip 
+        read -e -p "Deploy hipster with kubectl? (Y/N) [y]:" deployhip
         export DEPLOY_HIPSTER=${deployhip:-"y"}
     fi
 
     ## Get user provided Keys
     if [[ ${KOPS_AWS} == y ]]; then
         # AWS ID
-        read -e -p "AWS_ACCESS_KEY_ID [${AWS_ACCESS_KEY_ID:-$AWS_ACCESS_KEY_ID}]:" id 
+        read -e -p "AWS_ACCESS_KEY_ID [${AWS_ACCESS_KEY_ID:-$AWS_ACCESS_KEY_ID}]:" id
         export AWS_ACCESS_KEY_ID=${id:-"$AWS_ACCESS_KEY_ID"}
-        
+
         # AWS Key
-        read -e -p "AWS_SECRET_ACCESS_KEY [${AWS_SECRET_ACCESS_KEY:-$AWS_SECRET_ACCESS_KEY}]:" key 
+        read -e -p "AWS_SECRET_ACCESS_KEY [${AWS_SECRET_ACCESS_KEY:-$AWS_SECRET_ACCESS_KEY}]:" key
         export AWS_SECRET_ACCESS_KEY=${key:-"$AWS_SECRET_ACCESS_KEY"}
 
     fi
@@ -107,7 +107,7 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
 ## Install Tooling
     source ./common/settings.env
     ./common/install-tools.sh
-    echo -e "\nMultiple tasks are running asynchronously to setup your environment.  It may appear frozen, but you can check the logs in $WORK_DIR for additional details in another terminal window." 
+    echo -e "\nMultiple tasks are running asynchronously to setup your environment.  It may appear frozen, but you can check the logs in $WORK_DIR for additional details in another terminal window."
 
 ## Provision Clusters
 
@@ -122,13 +122,13 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     if [[ ${KOPS_GCE} == y ]]; then
         ./connect-hub/provision-remote-gce.sh &> ${WORK_DIR}/provision-gce-${GCE_CONTEXT}.log &
     fi
-    
+
     # External
     shopt -s nocasematch
     if [[ ${KOPS_AWS} == y ]]; then
         ./connect-hub/provision-remote-aws.sh &> ${WORK_DIR}/provision-aws-${AWS_CONTEXT}.log &
 
-        
+
     fi
 
     wait
@@ -136,7 +136,7 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
 ## Install Anthos Config Manager
 
     # Repo
-  
+
 
     yes y | ssh-keygen -t rsa -b 4096 -C "$GCLOUD_ACCOUNT" -N '' -f $HOME/.ssh/id_rsa.nomos>/dev/null
     gcloud services enable sourcerepo.googleapis.com
@@ -150,10 +150,10 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     # GKE
     shopt -s nocasematch
     if [[ ${GKE_CLUSTER} == y ]]; then
-        kubectx central && kubectl create ns config-management-system
-        kubectx central && kubectl create secret generic git-creds --namespace=config-management-system --from-file=ssh=$HOME/.ssh/id_rsa.nomos
-        kubectx central && ./config-management/install-config-operator.sh
-        kubectx central && ./config-management/install-config-sync.sh
+        kubectx gcp && kubectl create ns config-management-system
+        kubectx gcp && kubectl create secret generic git-creds --namespace=config-management-system --from-file=ssh=$HOME/.ssh/id_rsa.nomos
+        kubectx gcp && ./config-management/install-config-operator.sh
+        kubectx gcp && ./config-management/install-config-sync.sh
     fi
 
 
@@ -161,7 +161,7 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     shopt -s nocasematch
     if [[ ${KOPS_GCE} == y ]]; then
         kubectx ${GCE_CONTEXT} && kubectl create ns config-management-system
-        kubectx ${GCE_CONTEXT} && kubectl create secret generic git-creds --namespace=config-management-system --from-file=ssh=$HOME/.ssh/id_rsa.nomos    
+        kubectx ${GCE_CONTEXT} && kubectl create secret generic git-creds --namespace=config-management-system --from-file=ssh=$HOME/.ssh/id_rsa.nomos
         kubectx ${GCE_CONTEXT} && ./config-management/install-config-operator.sh
         kubectx ${GCE_CONTEXT} && ./config-management/install-config-sync.sh
     fi
@@ -170,22 +170,22 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     shopt -s nocasematch
     if [[ ${KOPS_AWS} == y ]]; then
         kubectx ${AWS_CONTEXT} && kubectl create ns config-management-system
-        kubectx ${AWS_CONTEXT} && kubectl create secret generic git-creds --namespace=config-management-system --from-file=ssh=$HOME/.ssh/id_rsa.nomos  
+        kubectx ${AWS_CONTEXT} && kubectl create secret generic git-creds --namespace=config-management-system --from-file=ssh=$HOME/.ssh/id_rsa.nomos
         kubectx ${AWS_CONTEXT} && ./config-management/install-config-operator.sh
         kubectx ${AWS_CONTEXT} && ./config-management/install-config-sync.sh
     fi
-    
-    
-    
+
+
+
 
 ## Install Istio
 
     # GKE
     shopt -s nocasematch
     if [[ ${GKE_CLUSTER} == y ]]; then
-        kubectx central && ./hybrid-multicluster/istio-install-single.sh
+        kubectx gcp && ./hybrid-multicluster/istio-install-single.sh
     fi
-    
+
 
     # GCE
     shopt -s nocasematch
@@ -205,7 +205,7 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     shopt -s nocasematch
     if [[ ${DEPLOY_HIPSTER} == y ]]; then
         ./hybrid-multicluster/deploy-hipster-single.sh
-    fi 
+    fi
 
 
 ## Enable Service Mesh
@@ -223,7 +223,7 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     if [[ ${KOPS_AWS} == y ]]; then
         export CONTEXT=$AWS_CONTEXT && ./connect-hub/connect-hub.sh
     fi
-    
+
 
 
 
