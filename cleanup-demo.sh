@@ -14,20 +14,38 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Variables
+source ./env
+source $BASE_DIR/common/manage-state.sh 
+load_state
+
 export PROJECT=$(gcloud config get-value project)
 export WORK_DIR=${WORK_DIR:="${PWD}/workdir"}
-export PATH=$PATH:$WORK_DIR/bin:
+
+echo "WORK_DIR set to $WORK_DIR"
+
+gcloud config set project $PROJECT
+
+# Clean up resources in the background and wait for completion
 
 
-export REMOTE_CLUSTER_NAME_BASE=${GCE_CONTEXT:-"remote"}
-export REMOTE_CLUSTER_NAME=$REMOTE_CLUSTER_NAME_BASE.k8s.local
-export KOPS_STORE=gs://$PROJECT-kops-$REMOTE_CLUSTER_NAME_BASE
+shopt -s nocasematch
+if [[ ${KOPS_AWS} == y ]]; then
+    export CONTEXT=$AWS_CONTEXT && ./connect-hub/cleanup-hub.sh
+    ./connect-hub/cleanup-remote-aws.sh 
+fi
 
-kops delete cluster --name $REMOTE_CLUSTER_NAME --state $KOPS_STORE --yes
+shopt -s nocasematch
+if [[ ${KOPS_GCE} == y ]]; then
+    export CONTEXT=$GCE_CONTEXT && ./connect-hub/cleanup-hub.sh
+    ./connect-hub/cleanup-remote-gce.sh 
+fi
 
-kubectx -d $REMOTE_CLUSTER_NAME_BASE 
+shopt -s nocasematch
+if [[ ${GKE_CLUSTER} == y ]]; then
+    ./gke/cleanup-gke.sh
+fi
+ 
 
-gsutil -m rm -r $KOPS_STORE
 
+rm -rf $WORK_DIR
 

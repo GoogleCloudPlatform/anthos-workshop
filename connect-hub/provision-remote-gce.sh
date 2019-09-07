@@ -18,10 +18,12 @@
 export PROJECT=$(gcloud config get-value project)
 export WORK_DIR=${WORK_DIR:="${PWD}/workdir"}
 
-export REMOTE_CLUSTER_NAME_BASE="remote"
+#export REMOTE_CLUSTER_NAME_BASE="remote-g"
+export REMOTE_CLUSTER_NAME_BASE=${GCE_CONTEXT:-"remote"}
+
 export REMOTE_CLUSTER_NAME=$REMOTE_CLUSTER_NAME_BASE.k8s.local
 export KOPS_STORE=gs://$PROJECT-kops-$REMOTE_CLUSTER_NAME_BASE
-export REMOTE_KUBECONFIG=$WORK_DIR/remote.context
+export REMOTE_KUBECONFIG=$WORK_DIR/${REMOTE_CLUSTER_NAME_BASE}.context
 export NODE_COUNT=4
 export NODE_SIZE=n1-standard-2
 export ZONES=us-central1-a
@@ -37,9 +39,7 @@ echo "### "
 mkdir -p $WORK_DIR/bin
 export PATH=$PATH:$WORK_DIR/bin:
 
-curl -sLO https://github.com/kubernetes/kops/releases/download/$(curl -s https://api.github.com/repos/kubernetes/kops/releases/latest | grep tag_name | cut -d '"' -f 4)/kops-linux-amd64
-chmod +x kops-linux-amd64
-mv kops-linux-amd64 $WORK_DIR/bin/kops
+
 
 # Unlock GCE features (?)
 export KOPS_FEATURE_FLAGS=AlphaAllowGCE

@@ -18,12 +18,11 @@
 export PROJECT=$(gcloud config get-value project)
 export WORK_DIR=${WORK_DIR:="${PWD}/workdir"}
 
-export REMOTE_CLUSTER_NAME_BASE="remote"
+export REMOTE_CLUSTER_NAME_BASE=${CONTEXT:-"remote"}
 export REMOTE_CLUSTER_NAME=$REMOTE_CLUSTER_NAME_BASE.k8s.local
-export REMOTE_KUBECONFIG=$WORK_DIR/remote.context
+export REMOTE_KUBECONFIG=$WORK_DIR/${REMOTE_CLUSTER_NAME_BASE}.context
 
 export GKE_CONNECT_SA=anthos-connect
-export GKE_CONNECT_SA=gke-connect-sa
 export GKE_SA_CREDS=$WORK_DIR/$GKE_CONNECT_SA-creds.json
 
 
@@ -50,10 +49,12 @@ gcloud projects add-iam-policy-binding $PROJECT \
     --member="serviceAccount:$GKE_CONNECT_SA@$PROJECT.iam.gserviceaccount.com" \
     --role="roles/gkehub.connect"
 
-# Create and download a key
-gcloud iam service-accounts keys create $GKE_SA_CREDS --project=$PROJECT \
-  --iam-account=$GKE_CONNECT_SA@$PROJECT.iam.gserviceaccount.com 
-
+FILE=$GKE_SA_CREDS
+if ! test -f "$FILE"; then
+    # Create and download a key
+    gcloud iam service-accounts keys create $GKE_SA_CREDS --project=$PROJECT \
+    --iam-account=$GKE_CONNECT_SA@$PROJECT.iam.gserviceaccount.com 
+fi
 
 
 ### Connect Cluster to Hub
@@ -61,7 +62,6 @@ gcloud alpha container hub register-cluster $REMOTE_CLUSTER_NAME_BASE\
  --context=$REMOTE_CLUSTER_NAME \
  --service-account-key-file=$GKE_SA_CREDS \
  --kubeconfig-file=$REMOTE_KUBECONFIG \
- --docker-image=gcr.io/gkeconnect/gkeconnect-gce:gkeconnect_20190311_00_00 \
  --project=$PROJECT
 
 
@@ -73,5 +73,5 @@ kubectl create clusterrolebinding ksa-admin-binding --clusterrole cluster-admin 
 
 # Generate Token for login process
 echo "###########################"
-echo "Use the following token during login at https://console.cloud.google.com/kubernetes/list"
-kubectl --kubeconfig=$REMOTE_KUBECONFIG describe secret $KSA | sed -ne 's/^token: *//p' 
+echo "Use the following token during login at https://console.cloud.google.com/kubernetes/list for cluster $REMOTE_KUBECONFIG"
+printf "\n$(kubectl --kubeconfig=$REMOTE_KUBECONFIG describe secret $KSA | sed -ne 's/^token: *//p')\n\n" 
