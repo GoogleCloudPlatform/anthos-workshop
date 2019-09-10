@@ -4,6 +4,8 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
 		source "/google/devshell/bashrc.google"
 	fi
 
+	cd $HOME/anthos-workshop
+
 	export BASE_DIR=$PWD
 	echo "BASE_DIR: ${BASE_DIR}"
 	export WORK_DIR=$BASE_DIR/workdir
