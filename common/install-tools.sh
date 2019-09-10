@@ -27,14 +27,6 @@ echo "### "
 echo "### Begin Tools install"
 echo "### "
 
-## Install tree
-if command -v tree 2>/dev/null; then
-	echo "tree already installed."
-else
-	echo "Installing tree..."
-	sudo apt-get install tree
-fi
-
 ## Install kubectx
 if command -v kubectx 2>/dev/null; then
 	echo "kubectx already installed."

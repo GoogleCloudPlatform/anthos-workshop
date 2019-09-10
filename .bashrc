@@ -15,6 +15,15 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
 	export PROJECT=$(gcloud config get-value project)
 	echo "PROJECT: ${PROJECT}"
 
+	## Install tree
+	## Note: This is here and not in install-tools.sh to ensure it is available across sessions since this is installed using apt-get
+	if command -v tree 2>/dev/null; then
+		echo "tree already installed."
+	else
+		echo "Installing tree..."
+		sudo apt-get install tree
+	fi
+
 else
     echo "This has only been tested in GCP Cloud Shell.  Only Linux (debian) is supported".
 fi
