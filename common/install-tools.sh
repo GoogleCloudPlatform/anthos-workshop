@@ -27,11 +27,23 @@ echo "### "
 echo "### Begin Tools install"
 echo "### "
 
-## Install kubectx
-curl -sLO https://raw.githubusercontent.com/ahmetb/kubectx/master/kubectx 
-chmod +x kubectx 
-mv kubectx $WORK_DIR/bin
+## Install tree
+if command -v tree 2>/dev/null; then
+	echo "tree already installed."
+else
+	echo "Installing tree..."
+	sudo apt-get install tree
+fi
 
+## Install kubectx
+if command -v kubectx 2>/dev/null; then
+	echo "kubectx already installed."
+else
+	echo "Installing kubectx..."
+	curl -sLO https://raw.githubusercontent.com/ahmetb/kubectx/master/kubectx 
+	chmod +x kubectx 
+	mv kubectx $WORK_DIR/bin
+fi
 
 # Install Helm
 #curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > get_helm.sh
@@ -40,19 +52,37 @@ mv kubectx $WORK_DIR/bin
 #cp /usr/local/bin/helm $WORK_DIR/bin
 #rm ./get_helm.sh
 
-HELM_VERSION=v2.13.0
-wget -q https://storage.googleapis.com/kubernetes-helm/helm-"$HELM_VERSION"-linux-amd64.tar.gz
-tar -xvzf helm-"$HELM_VERSION"-linux-amd64.tar.gz
-mv linux-amd64/helm $WORK_DIR/bin
-mv linux-amd64/tiller $WORK_DIR/bin
-rm helm-"$HELM_VERSION"-linux-amd64.tar.gz
-rm -rf linux-amd64
+# Install Helm
+if command -v helm 2>/dev/null; then
+	echo "helm already installed."
+else
+	echo "Installing helm..."
+	HELM_VERSION=v2.13.0
+	wget -q https://storage.googleapis.com/kubernetes-helm/helm-"$HELM_VERSION"-linux-amd64.tar.gz
+	tar -xvzf helm-"$HELM_VERSION"-linux-amd64.tar.gz
+	mv linux-amd64/helm $WORK_DIR/bin
+	mv linux-amd64/tiller $WORK_DIR/bin
+	rm helm-"$HELM_VERSION"-linux-amd64.tar.gz
+	rm -rf linux-amd64
+fi
 
+# Install Istio
+if [ -d "$WORK_DIR/istio-$ISTIO_VERSION" ]; then
+    if command -v istioctl 2>/dev/null; then
+		echo "Istio already installed."
+	else
+		echo "Installing Istio..."
+		curl -L https://git.io/getLatestIstio | ISTIO_VERSION=$ISTIO_VERSION sh -
+		cp istio-$ISTIO_VERSION/bin/istioctl $WORK_DIR/bin/.
+		mv istio-$ISTIO_VERSION $WORK_DIR/ 
+	fi
+else
+	echo "Installing Istio..."
+	curl -L https://git.io/getLatestIstio | ISTIO_VERSION=$ISTIO_VERSION sh -
+	cp istio-$ISTIO_VERSION/bin/istioctl $WORK_DIR/bin/.
+	mv istio-$ISTIO_VERSION $WORK_DIR/
+fi
 
-# Download Istio
-curl -L https://git.io/getLatestIstio | ISTIO_VERSION=$ISTIO_VERSION sh -
-cp istio-$ISTIO_VERSION/bin/istioctl $WORK_DIR/bin/.
-mv istio-$ISTIO_VERSION $WORK_DIR/
 
 # Install yq.v2
 #curl -o yq.v2 -OL https://github.com/mikefarah/yq/releases/download/2.3.0/yq_linux_amd64
