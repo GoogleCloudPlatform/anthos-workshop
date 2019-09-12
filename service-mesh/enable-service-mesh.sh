@@ -11,16 +11,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-export PROJECT=$(gcloud config get-value project)
-export PROJECT_ID=${PROJECT}
-export WORK_DIR=${WORK_DIR:="${PWD}/workdir"}
-
-export CLUSTER_VERSION="1.13.7-gke.19"
-export CLUSTER_NAME="gcp"
+export PROJECT_ID=$(gcloud config get-value project)
 export CLUSTER="gcp"
-export CLUSTER_ZONE="us-central1-b"
 export ZONE="us-central1-b"
-export CLUSTER_KUBECONFIG=$WORK_DIR/central.context
 
 kubectx gcp
 
@@ -46,5 +39,3 @@ gcloud iam service-accounts add-iam-policy-binding --role roles/iam.workloadIden
 kubectl annotate serviceaccount --namespace istio-system istio-mixer-service-account iam.gke.io/gcp-service-account=istio-mixer@${PROJECT_ID}.iam.gserviceaccount.com
 
 kubectl delete po $(kubectl get pod -n istio-system -l app=telemetry -o json | jq -r '.items[].metadata.name') -n istio-system
-
-
