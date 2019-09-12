@@ -143,7 +143,7 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     # source ./config-management/create-repo.sh
 
     gsutil cp gs://anthos-workshop-pc/acm $HOME/.ssh/id_rsa.nomos
-    
+
 
     GCLOUD_ACCOUNT=$(gcloud config get-value account)
     # export REPO_URL=ssh://${GCLOUD_ACCOUNT}@source.developers.google.com:2022/p/${PROJECT}/r/config-repo
@@ -183,11 +183,11 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
 
 ## Install Istio
 
-    # GKE
-    shopt -s nocasematch
-    if [[ ${GKE_CLUSTER} == y ]]; then
-        kubectx gcp && ./hybrid-multicluster/istio-install-single.sh
-    fi
+    # # GKE
+    # shopt -s nocasematch
+    # if [[ ${GKE_CLUSTER} == y ]]; then
+    #     kubectx gcp && ./hybrid-multicluster/istio-install-single.sh
+    # fi
 
 
     # GCE
