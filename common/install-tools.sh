@@ -64,5 +64,8 @@ curl -sLO https://github.com/kubernetes/kops/releases/download/$(curl -s https:/
 chmod +x kops-linux-amd64
 mv kops-linux-amd64 $WORK_DIR/bin/kops
 
-
+# Install nomos
+gsutil cp gs://config-management-release/released/latest/linux_amd64/nomos nomos
+chmod +x nomos
+mv nomos $WORK_DIR/bin
 
