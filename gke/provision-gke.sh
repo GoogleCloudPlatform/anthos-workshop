@@ -16,11 +16,14 @@
 
 # Variables
 export PROJECT=$(gcloud config get-value project)
+export PROJECT_ID=${PROJECT}
 export WORK_DIR=${WORK_DIR:="${PWD}/workdir"}
 
-export CLUSTER_VERSION="1.12"
+export CLUSTER_VERSION="1.13.7-gke.19"
 export CLUSTER_NAME="gcp"
+export CLUSTER="gcp"
 export CLUSTER_ZONE="us-central1-b"
+export ZONE="us-central1-b"
 export CLUSTER_KUBECONFIG=$WORK_DIR/central.context
 
 echo "### "
@@ -29,6 +32,7 @@ echo "### "
 
 gcloud beta container clusters create $CLUSTER_NAME --zone $CLUSTER_ZONE \
     --addons=HorizontalPodAutoscaling,HttpLoadBalancing,Istio,CloudRun \
+    --istio-config=auth=MTLS_PERMISSIVE \
     --username "admin" \
     --machine-type "n1-standard-4" \
     --image-type "COS" \
@@ -41,7 +45,9 @@ gcloud beta container clusters create $CLUSTER_NAME --zone $CLUSTER_ZONE \
     --enable-cloud-monitoring \
     --enable-ip-alias \
     --cluster-version=${CLUSTER_VERSION} \
-    --enable-stackdriver-kubernetes
+    --enable-stackdriver-kubernetes \
+    --identity-namespace=${PROJECT_ID}.svc.id.goog \
+    --labels csm=
 
 gcloud container clusters get-credentials ${CLUSTER_NAME} --zone ${CLUSTER_ZONE}
 
