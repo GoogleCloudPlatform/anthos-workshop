@@ -39,3 +39,5 @@ gcloud iam service-accounts add-iam-policy-binding --role roles/iam.workloadIden
 kubectl annotate serviceaccount --namespace istio-system istio-mixer-service-account iam.gke.io/gcp-service-account=istio-mixer@${PROJECT_ID}.iam.gserviceaccount.com
 
 kubectl delete po $(kubectl get pod -n istio-system -l app=telemetry -o json | jq -r '.items[].metadata.name') -n istio-system
+
+kubectl apply -f asm-mtls.yaml #enable mTLS for some services

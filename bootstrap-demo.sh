@@ -183,7 +183,7 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
 
 ## Install Istio
 
-    # # GKE
+    # # GKE - NOTE - USING ADD-ON
     # shopt -s nocasematch
     # if [[ ${GKE_CLUSTER} == y ]]; then
     #     kubectx gcp && ./hybrid-multicluster/istio-install-single.sh
@@ -203,6 +203,14 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     fi
 
 
+# Install Cloud Run on GKE
+    shopt -s nocasematch
+    if [[ ${KOPS_GCE} == y ]]; then
+        kubectx ${GCE_CONTEXT}
+        kubectl apply -f https://storage.googleapis.com/cloud-run-on-anthos/install/0.7.0/1-cluster-local-gateway.yaml
+        kubectl apply -f https://storage.googleapis.com/cloud-run-on-anthos/install/0.7.0/2-knative-0.7.0-local-gateway.yaml --selector knative.dev/crd-install=true
+        kubectl apply -f https://storage.googleapis.com/cloud-run-on-anthos/install/0.7.0/2-knative-0.7.0-local-gateway.yaml
+    fi
 
 ## Install Hipster on GKE
     shopt -s nocasematch
@@ -211,7 +219,7 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     fi
 
 
-## Enable Service Mesh
+## Enable ASM on GCP cluster
     ./service-mesh/enable-service-mesh.sh
 
 ## Register With Anthos Hub

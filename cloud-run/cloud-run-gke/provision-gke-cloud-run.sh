@@ -37,7 +37,7 @@ gcloud beta container clusters create $CLOUDRUN_CLUSTER_NAME \
 # rename context
 kubectx $CLOUDRUN_CLUSTER_NAME=gke_${PROJECT}_${CLOUDRUN_ZONE}_${CLOUDRUN_CLUSTER_NAME}
 
-# export pod and svc ip ranges 
+# export pod and svc ip ranges
 export POD_IP_RANGE=$(gcloud container clusters describe $CLOUDRUN_CLUSTER_NAME --zone $CLOUDRUN_ZONE --format=flattened | grep -e clusterIpv4Cidr | awk 'FNR == 1 {print $2}')
 export SERVICE_IP_RANGE=$(gcloud container clusters describe $CLOUDRUN_CLUSTER_NAME --zone $CLOUDRUN_ZONE --format=flattened | grep -e servicesIpv4Cidr | awk 'FNR == 1 {print $2}')
 
