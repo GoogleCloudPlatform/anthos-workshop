@@ -203,13 +203,16 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     fi
 
 
-# Install Cloud Run on GKE
+# Install Cloud Run on GKE on remote cluster
     shopt -s nocasematch
     if [[ ${KOPS_GCE} == y ]]; then
         kubectx ${GCE_CONTEXT}
         kubectl apply -f https://storage.googleapis.com/cloud-run-on-anthos/install/0.7.0/1-cluster-local-gateway.yaml
         kubectl apply -f https://storage.googleapis.com/cloud-run-on-anthos/install/0.7.0/2-knative-0.7.0-local-gateway.yaml --selector knative.dev/crd-install=true
         kubectl apply -f https://storage.googleapis.com/cloud-run-on-anthos/install/0.7.0/2-knative-0.7.0-local-gateway.yaml
+        kubectl apply --filename https://github.com/knative/serving/releases/download/v0.7.0/serving.yaml --selector knative.dev/crd-install=true
+        kubectl apply --filename https://github.com/knative/serving/releases/download/v0.7.0/serving.yaml --selector networking.knative.dev/certificate-provider!=cert-manager
+        kubectl apply -f anthos-workshop/cluster-local-gateway.yaml # In cloud shell
     fi
 
 ## Install Hipster on GKE
