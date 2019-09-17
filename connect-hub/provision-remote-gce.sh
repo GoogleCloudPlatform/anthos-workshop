@@ -37,7 +37,7 @@ echo "### "
 mkdir -p $WORK_DIR/bin
 export PATH=$PATH:$WORK_DIR/bin:
 
-curl -sLO https://github.com/kubernetes/kops/releases/download/$(curl -s https://api.github.com/repos/kubernetes/kops/releases/latest | grep tag_name | cut -d '"' -f 4)/kops-linux-amd64
+curl -sLO https://github.com/kubernetes/kops/releases/download/$KOPS_VERSION/kops-linux-amd64
 chmod +x kops-linux-amd64
 mv kops-linux-amd64 $WORK_DIR/bin/kops
 
