@@ -18,7 +18,6 @@
 export PROJECT=$(gcloud config get-value project)
 export WORK_DIR=${WORK_DIR:="${PWD}/workdir"}
 
-export CLUSTER_VERSION="1.12"
 export CLUSTER_NAME="central"
 export CLUSTER_ZONE="us-central1-b"
 export CLUSTER_KUBECONFIG=$WORK_DIR/central.context
