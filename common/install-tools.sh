@@ -37,14 +37,14 @@ else
 	mv kubectx $WORK_DIR/bin
 fi
 
-# Install Helm
+## Install Helm
 #curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > get_helm.sh
 #chmod 700 get_helm.sh
 #./get_helm.sh &> /dev/null
 #cp /usr/local/bin/helm $WORK_DIR/bin
 #rm ./get_helm.sh
 
-# Install Helm
+## Install Helm
 if command -v helm 2>/dev/null; then
 	echo "helm already installed."
 else
@@ -58,7 +58,7 @@ else
 	rm -rf linux-amd64
 fi
 
-# Install Istio
+## Install Istio
 if [ -d "$WORK_DIR/istio-$ISTIO_VERSION" ]; then
     if command -v istioctl 2>/dev/null; then
 		echo "Istio already installed."
@@ -75,6 +75,16 @@ else
 	mv istio-$ISTIO_VERSION $WORK_DIR/
 fi
 
+
+## Install kops
+if command -v kops 2>/dev/null; then
+	echo "kops already installed."
+else
+	echo "Installing kops"
+	curl -sLO https://github.com/kubernetes/kops/releases/download/$(curl -s https://api.github.com/repos/kubernetes/kops/releases/latest | grep tag_name | cut -d '"' -f 4)/kops-linux-amd64
+	chmod +x kops-linux-amd64
+	mv kops-linux-amd64 $WORK_DIR/bin/kops
+fi
 
 # Install yq.v2
 #curl -o yq.v2 -OL https://github.com/mikefarah/yq/releases/download/2.3.0/yq_linux_amd64
