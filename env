@@ -1,15 +1,16 @@
-export BASE_DIR=$PWD
-echo $BASE_DIR
-export WORK_DIR=$BASE_DIR/workdir
-echo $WORK_DIR
-export PATH=$PATH:$WORK_DIR/bin:
+cd $HOME/anthos-workshop
 
-# Versions
-export ISTIO_VERSION=1.1.15
-export KUBECTX_VERSION=v0.7.0
-export HELM_VERSION=v2.14.3
-export GKE_CLUSTER_VERSION=1.13.7
-export KOPS_VERSION=1.12.3
+echo 'export BASE_DIR=$PWD' >> $HOME/.bashrc
+echo 'export WORK_DIR=$BASE_DIR/workdir' >> $HOME/.bashrc
+echo 'export PATH=$PATH:$WORK_DIR/bin:' >> $HOME/.bashrc
+echo 'export PROJECT=$(gcloud config get-value project)' >> $HOME/.bashrc
 
-# Install Tree
-sudo apt-get install tree
+echo 'export ISTIO_VERSION=1.1.15' >> $HOME/.bashrc
+echo 'export KUBECTX_VERSION=v0.7.0' >> $HOME/.bashrc
+echo 'export HELM_VERSION=v2.14.3' >> $HOME/.bashrc
+echo 'export GKE_CLUSTER_VERSION=1.13.7' >> $HOME/.bashrc
+echo 'export KOPS_VERSION=1.12.3' >> $HOME/.bashrc
+
+echo 'sudo apt-get install tree' >> $HOME/.bashrc
+
+source $HOME/.bashrc
