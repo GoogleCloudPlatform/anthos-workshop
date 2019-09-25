@@ -7,13 +7,14 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
 	cd $HOME/anthos-workshop
 
 	export BASE_DIR=$PWD
-	echo "BASE_DIR: ${BASE_DIR}"
 	export WORK_DIR=$BASE_DIR/workdir
-	echo "WORK_DIR: ${WORK_DIR}"
 	export PATH=$PATH:$WORK_DIR/bin:
-	echo "PATH: ${PATH}"
 	export PROJECT=$(gcloud config get-value project)
-	echo "PROJECT: ${PROJECT}"
+	export ISTIO_VERSION=1.1.15
+	export KUBECTX_VERSION=v0.7.0
+	export HELM_VERSION=v2.14.3
+	export GKE_CLUSTER_VERSION=1.13.7
+	export KOPS_VERSION=1.12.3
 
 	## Install tree
 	## Note: This is here and not in install-tools.sh to ensure it is available across sessions since this is installed using apt-get
