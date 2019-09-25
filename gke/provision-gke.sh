@@ -20,7 +20,6 @@ echo "### Begin Provision GKE"
 echo "### "
 
 ## Setting variables for GKE
-export CLUSTER_VERSION="1.12"
 export CLUSTER_NAME="central"
 export CLUSTER_ZONE="us-central1-b"
 export CLUSTER_KUBECONFIG=$WORK_DIR/$CLUSTER_NAME.context

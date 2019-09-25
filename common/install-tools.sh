@@ -18,7 +18,6 @@
 export PROJECT=$(gcloud config get-value project)
 export WORK_DIR=${WORK_DIR:="${PWD}/workdir"}
 
-export ISTIO_VERSION=1.1.4
 
 ## Install Tools
 mkdir -p $WORK_DIR/bin
@@ -32,7 +31,7 @@ if command -v kubectx 2>/dev/null; then
 	echo "kubectx already installed."
 else
 	echo "Installing kubectx..."
-	curl -sLO https://raw.githubusercontent.com/ahmetb/kubectx/master/kubectx 
+	curl -sLO https://raw.githubusercontent.com/ahmetb/kubectx/"$KUBECTX_VERSION"/kubectx 
 	chmod +x kubectx 
 	mv kubectx $WORK_DIR/bin
 fi
@@ -49,7 +48,6 @@ if command -v helm 2>/dev/null; then
 	echo "helm already installed."
 else
 	echo "Installing helm..."
-	HELM_VERSION=v2.13.0
 	wget -q https://storage.googleapis.com/kubernetes-helm/helm-"$HELM_VERSION"-linux-amd64.tar.gz
 	tar -xvzf helm-"$HELM_VERSION"-linux-amd64.tar.gz
 	mv linux-amd64/helm $WORK_DIR/bin
@@ -81,8 +79,8 @@ if command -v kops 2>/dev/null; then
 	echo "kops already installed."
 else
 	echo "Installing kops"
-	curl -sLO https://github.com/kubernetes/kops/releases/download/$(curl -s https://api.github.com/repos/kubernetes/kops/releases/latest | grep tag_name | cut -d '"' -f 4)/kops-linux-amd64
-	chmod +x kops-linux-amd64
+  curl -sLO https://github.com/kubernetes/kops/releases/download/$KOPS_VERSION/kops-linux-amd64
+  chmod +x kops-linux-amd64
 	mv kops-linux-amd64 $WORK_DIR/bin/kops
 fi
 
