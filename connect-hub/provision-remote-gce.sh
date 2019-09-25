@@ -64,7 +64,7 @@ if [ $? -ne 0 ]; then
 	--project=${PROJECT} \
 	--node-count=$NODE_COUNT \
 	--node-size=$NODE_SIZE \
-	--admin-access='0.0.0.0/0' \
+	--admin-access=0.0.0.0/0 \
 	--yes
     # --master-size $MASTER_SIZE --master-count 3
 else
