@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Variables
+set -e
 
 if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then 
 
@@ -31,7 +31,6 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     ./hybrid-multicluster/istio-install.sh
 
     ./service-mesh/enable-service-mesh.sh
-
 else
     echo "This has only been tested in GCP Cloud Shell.  Only Linux (debian) is supported".
 fi

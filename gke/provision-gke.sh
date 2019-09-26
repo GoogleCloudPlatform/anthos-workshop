@@ -14,15 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Variables
+set -e
+
 echo "### "
 echo "### Begin Provision GKE"
 echo "### "
-
-## Setting variables for GKE
-export CLUSTER_NAME="central"
-export CLUSTER_ZONE="us-central1-b"
-export CLUSTER_KUBECONFIG=$WORK_DIR/$CLUSTER_NAME.context
 
 ## Check if cluster already exists to avoid errors
 EXISTING_CLUSTER=$(gcloud container clusters list --format="value(name)" --filter="name ~ ${CLUSTER_NAME} AND location:${CLUSTER_ZONE}")
@@ -45,11 +41,6 @@ else
         --enable-ip-alias \
         --cluster-version=${CLUSTER_VERSION} \
         --enable-stackdriver-kubernetes
-fi
-
-if [ $? -ne 0 ]; then
-    echo "ERROR: GKE cluster creation failed. check the logs in $WORK_DIR for additional details"
-    exit 1
 fi
 
 echo "Getting cluster credentials"
