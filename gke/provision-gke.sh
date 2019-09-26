@@ -47,8 +47,15 @@ else
         --enable-stackdriver-kubernetes
 fi
 
+if [ $? -ne 0 ]; then
+    echo "ERROR: GKE cluster creation failed. check the logs in $WORK_DIR for additional details"
+    exit 1
+fi
+
+echo "Getting cluster credentials"
 gcloud container clusters get-credentials ${CLUSTER_NAME} --zone ${CLUSTER_ZONE}
 
+echo "Renaming kubectx context to ${CLUSTER_NAME} and switching to context"
 kubectx ${CLUSTER_NAME}=gke_${PROJECT}_${CLUSTER_ZONE}_${CLUSTER_NAME}
 kubectx ${CLUSTER_NAME}
 

@@ -34,6 +34,7 @@ else
 	curl -sLO https://raw.githubusercontent.com/ahmetb/kubectx/"$KUBECTX_VERSION"/kubectx 
 	chmod +x kubectx 
 	mv kubectx $WORK_DIR/bin
+	echo "kubectx installation complete."
 fi
 
 ## Install Helm
@@ -54,6 +55,7 @@ else
 	mv linux-amd64/tiller $WORK_DIR/bin
 	rm helm-"$HELM_VERSION"-linux-amd64.tar.gz
 	rm -rf linux-amd64
+	echo "helm installation complete."
 fi
 
 ## Install Istio
@@ -61,13 +63,13 @@ if [ -d "$WORK_DIR/istio-$ISTIO_VERSION" ]; then
     if command -v istioctl 2>/dev/null; then
 		echo "Istio already installed."
 	else
-		echo "Installing Istio..."
+		echo "Downloading Istio..."
 		curl -L https://git.io/getLatestIstio | ISTIO_VERSION=$ISTIO_VERSION sh -
 		cp istio-$ISTIO_VERSION/bin/istioctl $WORK_DIR/bin/.
 		mv istio-$ISTIO_VERSION $WORK_DIR/ 
 	fi
 else
-	echo "Installing Istio..."
+	echo "Downloading Istio..."
 	curl -L https://git.io/getLatestIstio | ISTIO_VERSION=$ISTIO_VERSION sh -
 	cp istio-$ISTIO_VERSION/bin/istioctl $WORK_DIR/bin/.
 	mv istio-$ISTIO_VERSION $WORK_DIR/
@@ -78,10 +80,11 @@ fi
 if command -v kops 2>/dev/null; then
 	echo "kops already installed."
 else
-	echo "Installing kops"
-  curl -sLO https://github.com/kubernetes/kops/releases/download/$KOPS_VERSION/kops-linux-amd64
-  chmod +x kops-linux-amd64
+	echo "Installing kops..."
+	curl -sLO https://github.com/kubernetes/kops/releases/download/$KOPS_VERSION/kops-linux-amd64
+	chmod +x kops-linux-amd64
 	mv kops-linux-amd64 $WORK_DIR/bin/kops
+	echo "kops installation complete."
 fi
 
 # Install yq.v2

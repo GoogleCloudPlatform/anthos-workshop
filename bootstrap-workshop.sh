@@ -23,7 +23,7 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
 
     ./gke/provision-gke.sh &> ${WORK_DIR}/provision-gke.log &
     ./connect-hub/provision-remote-gce.sh &> ${WORK_DIR}/provision-remote.log &
-    wait
+    wait -n
 
     kubectx central && ./config-management/install-config-operator.sh
     kubectx remote && ./config-management/install-config-operator.sh
