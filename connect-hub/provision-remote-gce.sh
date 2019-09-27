@@ -14,17 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Variables
-export REMOTE_CLUSTER_NAME_BASE="remote"
-export REMOTE_CLUSTER_NAME=$REMOTE_CLUSTER_NAME_BASE.k8s.local
-export KOPS_STORE=gs://$PROJECT-kops-$REMOTE_CLUSTER_NAME_BASE
-export REMOTE_KUBECONFIG=$WORK_DIR/remote.context
-export NODE_COUNT=4
-export NODE_SIZE=n1-standard-2
-export ZONES=us-central1-a
-export INSTANCE_IP=$(curl -s api.ipify.org)
-export INSTANCE_CIDR=$INSTANCE_IP/32
-
 echo "### "
 echo "### Begin provision remote cluster"
 echo "### "
@@ -71,8 +60,7 @@ else
 	echo "${REMOTE_CLUSTER_NAME} already exists"
 fi
 
-kops export kubecfg $REMOTE_CLUSTER_NAME --state $KOPS_STORE > $REMOTE_KUBECONFIG
-
+KUBECONFIG= kubectl config view --minify --flatten --context=$REMOTE_CLUSTER_NAME > $REMOTE_KUBECONFIG
 
 for (( c=1; c<=20; c++))
 do
