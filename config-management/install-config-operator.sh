@@ -16,7 +16,6 @@
 
 # Variables
 # Required from external Var
-export OPERATOR_YAML_LOCATION=$(gsutil cat gs://anthos-workshop/cfg-op-loc)
 kubectl apply -f $OPERATOR_YAML_LOCATION
 
 echo "### "
