@@ -26,6 +26,15 @@ echo "### "
 echo "### Begin Tools install"
 echo "### "
 
+## Install tree
+## Note: This is here and not in install-tools.sh to ensure it is available across sessions since this is installed using apt-get
+if command -v tree 2>/dev/null; then
+	echo "tree already installed."
+else
+	echo "Installing tree..."
+	sudo apt-get install tree
+fi
+
 ## Install kubectx
 if command -v kubectx 2>/dev/null; then
 	echo "kubectx already installed."
@@ -91,8 +100,3 @@ fi
 #curl -o yq.v2 -OL https://github.com/mikefarah/yq/releases/download/2.3.0/yq_linux_amd64
 #chmod +x yq.v2
 #mv yq.v2 $WORK_DIR/bin
-
-
-
-
-

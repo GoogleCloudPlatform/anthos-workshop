@@ -36,8 +36,6 @@ else
         --num-nodes "4" \
         --enable-autoscaling --min-nodes 4 --max-nodes 8 \
         --network "default" \
-        --enable-cloud-logging \
-        --enable-cloud-monitoring \
         --enable-ip-alias \
         --cluster-version=${CLUSTER_VERSION} \
         --enable-stackdriver-kubernetes
