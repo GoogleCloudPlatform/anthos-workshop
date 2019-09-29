@@ -21,8 +21,8 @@ if [[ -z "$ISTIO_VERSION" ]]; then
     echo 'export KUBECTX_VERSION="v0.7.0"' >> ~/.bashrc
     export HELM_VERSION=v2.14.3
     echo 'export HELM_VERSION="v2.14.3"' >> ~/.bashrc
-    export CLUSTER_VERSION=1.13.7
-    echo 'export CLUSTER_VERSION="1.13.7"' >> ~/.bashrc
+    export CLUSTER_VERSION=1.13
+    echo 'export CLUSTER_VERSION="1.13"' >> ~/.bashrc
     export KOPS_VERSION=1.12.3
     echo 'export KOPS_VERSION="1.12.3"' >> ~/.bashrc
 fi
