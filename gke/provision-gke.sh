@@ -39,7 +39,7 @@ else
         --enable-ip-alias \
         --cluster-version=${CLUSTER_VERSION} \
         --enable-stackdriver-kubernetes \
-        --identity-namespace=${PROJECT_ID}.svc.id.goog \
+        --identity-namespace=${PROJECT}.svc.id.goog \
         --labels csm=
 fi
 
