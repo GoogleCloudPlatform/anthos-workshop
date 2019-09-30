@@ -27,17 +27,19 @@ if [ "${EXISTING_CLUSTER}" == "${CLUSTER_NAME}" ]; then
     echo "Cluster already created."
 else
     echo "Creating cluster..."
-    gcloud beta container clusters create ${CLUSTER_NAME} --zone ${CLUSTER_ZONE} \
+    gcloud beta container clusters create $CLUSTER_NAME --zone $CLUSTER_ZONE \
         --username "admin" \
+        --machine-type "n1-standard-2" \
         --image-type "COS" \
         --disk-size "100" \
-        --cluster-version=${CLUSTER_VERSION} \
-        --machine-type=n1-standard-2 \
-        --num-nodes=4 \
-        --enable-stackdriver-kubernetes \
-        --subnetwork=default \
+        --scopes "https://www.googleapis.com/auth/compute","https://www.googleapis.com/auth/devstorage.read_only","https://www.googleapis.com/auth/logging.write","https://www.googleapis.com/auth/monitoring","https://www.googleapis.com/auth/servicecontrol","https://www.googleapis.com/auth/service.management.readonly","https://www.googleapis.com/auth/trace.append" \
+        --num-nodes "4" \
+        --enable-autoscaling --min-nodes 4 --max-nodes 8 \
+        --network "default" \
         --enable-ip-alias \
-        --identity-namespace=${PROJECT}.svc.id.goog \
+        --cluster-version=${CLUSTER_VERSION} \
+        --enable-stackdriver-kubernetes \
+        --identity-namespace=${PROJECT_ID}.svc.id.goog \
         --labels csm=
 fi
 
