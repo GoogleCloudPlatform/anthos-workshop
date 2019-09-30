@@ -34,7 +34,7 @@ data:
     {"global": ["$(kubectl --context central get svc -n istio-system istiocoredns -o jsonpath={.spec.clusterIP})"]}
 EOF
 
-# Install in central cluster
+# Install in remote cluster
 kubectx remote
 kubectl apply -f - <<EOF
 apiVersion: v1
