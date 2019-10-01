@@ -20,7 +20,7 @@ export PROJECT_ID=${PROJECT}
 export WORK_DIR=${WORK_DIR:="${PWD}/workdir"}
 
 export CLUSTER="gcp"
-export CLUSTER_VERSION="1.13.7-gke.8"
+export CLUSTER_VERSION="1.13"
 export ZONE="us-central1-b"
 export CLUSTER_KUBECONFIG=$WORK_DIR/central.context
 
