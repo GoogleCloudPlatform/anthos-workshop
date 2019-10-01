@@ -33,6 +33,7 @@ if command -v tree 2>/dev/null; then
 else
 	echo "Installing tree..."
 	sudo apt-get install tree
+	sudo mv /usr/bin/tree $WORK_DIR/bin
 fi
 
 ## Install kubectx

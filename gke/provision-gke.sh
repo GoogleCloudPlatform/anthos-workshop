@@ -27,7 +27,7 @@ if [ "${EXISTING_CLUSTER}" == "${CLUSTER_NAME}" ]; then
     echo "Cluster already created."
 else
     echo "Creating cluster..."
-    gcloud beta container clusters create $CLUSTER_NAME --zone $CLUSTER_ZONE \
+    gcloud beta container clusters create ${CLUSTER_NAME} --zone ${CLUSTER_ZONE} \
         --username "admin" \
         --machine-type "n1-standard-2" \
         --image-type "COS" \
