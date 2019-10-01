@@ -57,5 +57,5 @@ sed -r -i "s|$pattern|$replace|g" ${ISTIO_CONFIG_DIR}/remote/service-entries.yam
 kubectl create namespace hipster1
 kubectl label namespace hipster1 istio-injection=enabled
 
-# Deploy part of hipster app on central cluster in the namespace hipster2
+# Deploy part of hipster app on remote cluster in the namespace hipster2
 kubectl apply -n hipster1  -f ${ISTIO_CONFIG_DIR}/remote

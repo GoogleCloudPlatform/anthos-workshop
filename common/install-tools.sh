@@ -32,23 +32,6 @@ curl -sLO https://raw.githubusercontent.com/ahmetb/kubectx/master/kubectx
 chmod +x kubectx 
 mv kubectx $WORK_DIR/bin
 
-
-# Install Helm
-#curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > get_helm.sh
-#chmod 700 get_helm.sh
-#./get_helm.sh &> /dev/null
-#cp /usr/local/bin/helm $WORK_DIR/bin
-#rm ./get_helm.sh
-
-HELM_VERSION=v2.13.0
-wget -q https://storage.googleapis.com/kubernetes-helm/helm-"$HELM_VERSION"-linux-amd64.tar.gz
-tar -xvzf helm-"$HELM_VERSION"-linux-amd64.tar.gz
-mv linux-amd64/helm $WORK_DIR/bin
-mv linux-amd64/tiller $WORK_DIR/bin
-rm helm-"$HELM_VERSION"-linux-amd64.tar.gz
-rm -rf linux-amd64
-
-
 # Download Istio
 curl -L https://git.io/getLatestIstio | ISTIO_VERSION=$ISTIO_VERSION sh -
 cp istio-$ISTIO_VERSION/bin/istioctl $WORK_DIR/bin/.
