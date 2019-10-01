@@ -19,7 +19,7 @@ export PROJECT=$(gcloud config get-value project)
 export PROJECT_ID=${PROJECT}
 export WORK_DIR=${WORK_DIR:="${PWD}/workdir"}
 
-export CLUSTER_VERSION="1.13.7-gke.19"
+export CLUSTER_VERSION="1.13"
 export CLUSTER_NAME="gcp"
 export CLUSTER="gcp"
 export CLUSTER_ZONE="us-central1-b"
@@ -45,6 +45,7 @@ gcloud beta container clusters create $CLUSTER_NAME --zone $CLUSTER_ZONE \
     --enable-cloud-monitoring \
     --enable-ip-alias \
     --cluster-version=${CLUSTER_VERSION} \
+    --cluster-version="latest" \  #use the latest version of minor version
     --enable-stackdriver-kubernetes \
     --identity-namespace=${PROJECT_ID}.svc.id.goog \
     --labels csm=
