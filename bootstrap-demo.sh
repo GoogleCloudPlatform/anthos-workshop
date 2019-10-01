@@ -207,6 +207,7 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     shopt -s nocasematch
     if [[ ${KOPS_GCE} == y ]]; then
         kubectx ${GCE_CONTEXT}
+        kubectl create namespace gke-system
         kubectl apply -f https://storage.googleapis.com/cloud-run-on-anthos/install/0.7.0/1-cluster-local-gateway.yaml
         kubectl apply -f https://storage.googleapis.com/cloud-run-on-anthos/install/0.7.0/2-knative-0.7.0-local-gateway.yaml --selector knative.dev/crd-install=true
         kubectl apply -f https://storage.googleapis.com/cloud-run-on-anthos/install/0.7.0/2-knative-0.7.0-local-gateway.yaml
