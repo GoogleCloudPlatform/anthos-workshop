@@ -47,27 +47,6 @@ else
 	echo "kubectx installation complete."
 fi
 
-## Install Helm
-#curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > get_helm.sh
-#chmod 700 get_helm.sh
-#./get_helm.sh &> /dev/null
-#cp /usr/local/bin/helm $WORK_DIR/bin
-#rm ./get_helm.sh
-
-## Install Helm
-if command -v helm 2>/dev/null; then
-	echo "helm already installed."
-else
-	echo "Installing helm..."
-	wget -q https://storage.googleapis.com/kubernetes-helm/helm-"$HELM_VERSION"-linux-amd64.tar.gz
-	tar -xvzf helm-"$HELM_VERSION"-linux-amd64.tar.gz
-	mv linux-amd64/helm $WORK_DIR/bin
-	mv linux-amd64/tiller $WORK_DIR/bin
-	rm helm-"$HELM_VERSION"-linux-amd64.tar.gz
-	rm -rf linux-amd64
-	echo "helm installation complete."
-fi
-
 ## Install Istio
 if [ -d "$WORK_DIR/istio-$ISTIO_VERSION" ]; then
     if command -v istioctl 2>/dev/null; then
