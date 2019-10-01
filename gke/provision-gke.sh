@@ -20,6 +20,7 @@ export PROJECT_ID=${PROJECT}
 export WORK_DIR=${WORK_DIR:="${PWD}/workdir"}
 
 export CLUSTER="gcp"
+export CLUSTER_VERSION="1.13.7-gke.8"
 export ZONE="us-central1-b"
 export CLUSTER_KUBECONFIG=$WORK_DIR/central.context
 
@@ -39,7 +40,7 @@ gcloud beta container clusters create $CLUSTER --zone $ZONE \
     --enable-autoscaling --min-nodes 5 --max-nodes 10 \
     --network "default" \
     --enable-ip-alias \
-    --cluster-version=latest \
+    --cluster-version=${CLUSTER_VERSION} \
     --enable-stackdriver-kubernetes \
     --identity-namespace=${PROJECT_ID}.svc.id.goog \
     --labels csm=

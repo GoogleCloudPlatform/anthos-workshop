@@ -136,17 +136,15 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
 ## Install Anthos Config Manager
 
     # Repo
-
-
-    # yes y | ssh-keygen -t rsa -b 4096 -C "$GCLOUD_ACCOUNT" -N '' -f $HOME/.ssh/id_rsa.nomos>/dev/null
-    # gcloud services enable sourcerepo.googleapis.com
-    # source ./config-management/create-repo.sh
+    yes y | ssh-keygen -t rsa -b 4096 -C "$GCLOUD_ACCOUNT" -N '' -f $HOME/.ssh/id_rsa.nomos>/dev/null
+    gcloud services enable sourcerepo.googleapis.com
+    source ./config-management/create-repo.sh
 
     gsutil cp gs://anthos-workshop-pc/acm $HOME/.ssh/id_rsa.nomos
 
 
     GCLOUD_ACCOUNT=$(gcloud config get-value account)
-    # export REPO_URL=ssh://${GCLOUD_ACCOUNT}@source.developers.google.com:2022/p/${PROJECT}/r/config-repo
+    export REPO_URL=ssh://${GCLOUD_ACCOUNT}@source.developers.google.com:2022/p/${PROJECT}/r/config-repo
 
 
     cd $HOME/anthos-workshop
