@@ -45,7 +45,7 @@ kubectl label namespace hipster2 istio-injection=enabled
 kubectl apply -n hipster2  -f ${ISTIO_CONFIG_DIR}/central
 
 # Prepare remote cluster hipster manifests
-# change context to central cluster
+# change context to remote cluster
 kubectx remote
 # Prepare the service-entries yaml to add the remote cluster istio ingress gateway IP 
 # for all services running in the remote cluster
@@ -57,5 +57,5 @@ sed -r -i "s|$pattern|$replace|g" ${ISTIO_CONFIG_DIR}/remote/service-entries.yam
 kubectl create namespace hipster1
 kubectl label namespace hipster1 istio-injection=enabled
 
-# Deploy part of hipster app on central cluster in the namespace hipster2
+# Deploy part of hipster app on remote cluster in the namespace hipster2
 kubectl apply -n hipster1  -f ${ISTIO_CONFIG_DIR}/remote

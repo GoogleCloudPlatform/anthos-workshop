@@ -36,11 +36,11 @@ else
         --num-nodes "4" \
         --enable-autoscaling --min-nodes 4 --max-nodes 8 \
         --network "default" \
-        --enable-cloud-logging \
-        --enable-cloud-monitoring \
         --enable-ip-alias \
         --cluster-version=${CLUSTER_VERSION} \
-        --enable-stackdriver-kubernetes
+        --enable-stackdriver-kubernetes \
+        --identity-namespace=${PROJECT}.svc.id.goog \
+        --labels csm=
 fi
 
 echo "Getting cluster credentials"

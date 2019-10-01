@@ -26,6 +26,16 @@ echo "### "
 echo "### Begin Tools install"
 echo "### "
 
+## Install tree
+## Note: This is here and not in install-tools.sh to ensure it is available across sessions since this is installed using apt-get
+if command -v tree 2>/dev/null; then
+	echo "tree already installed."
+else
+	echo "Installing tree..."
+	sudo apt-get install tree
+	sudo mv /usr/bin/tree $WORK_DIR/bin
+fi
+
 ## Install kubectx
 if command -v kubectx 2>/dev/null; then
 	echo "kubectx already installed."
@@ -35,27 +45,6 @@ else
 	chmod +x kubectx 
 	mv kubectx $WORK_DIR/bin
 	echo "kubectx installation complete."
-fi
-
-## Install Helm
-#curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > get_helm.sh
-#chmod 700 get_helm.sh
-#./get_helm.sh &> /dev/null
-#cp /usr/local/bin/helm $WORK_DIR/bin
-#rm ./get_helm.sh
-
-## Install Helm
-if command -v helm 2>/dev/null; then
-	echo "helm already installed."
-else
-	echo "Installing helm..."
-	wget -q https://storage.googleapis.com/kubernetes-helm/helm-"$HELM_VERSION"-linux-amd64.tar.gz
-	tar -xvzf helm-"$HELM_VERSION"-linux-amd64.tar.gz
-	mv linux-amd64/helm $WORK_DIR/bin
-	mv linux-amd64/tiller $WORK_DIR/bin
-	rm helm-"$HELM_VERSION"-linux-amd64.tar.gz
-	rm -rf linux-amd64
-	echo "helm installation complete."
 fi
 
 ## Install Istio
@@ -91,8 +80,3 @@ fi
 #curl -o yq.v2 -OL https://github.com/mikefarah/yq/releases/download/2.3.0/yq_linux_amd64
 #chmod +x yq.v2
 #mv yq.v2 $WORK_DIR/bin
-
-
-
-
-
