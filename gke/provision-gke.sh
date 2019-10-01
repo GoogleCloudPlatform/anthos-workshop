@@ -41,11 +41,9 @@ gcloud beta container clusters create $CLUSTER_NAME --zone $CLUSTER_ZONE \
     --num-nodes "5" \
     --enable-autoscaling --min-nodes 5 --max-nodes 10 \
     --network "default" \
-    --enable-cloud-logging \
-    --enable-cloud-monitoring \
     --enable-ip-alias \
     --cluster-version=${CLUSTER_VERSION} \
-    --cluster-version="latest" \  #use the latest version of minor version
+    --cluster-version=latest \
     --enable-stackdriver-kubernetes \
     --identity-namespace=${PROJECT_ID}.svc.id.goog \
     --labels csm=
