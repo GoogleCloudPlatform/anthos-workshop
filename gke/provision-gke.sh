@@ -19,10 +19,7 @@ export PROJECT=$(gcloud config get-value project)
 export PROJECT_ID=${PROJECT}
 export WORK_DIR=${WORK_DIR:="${PWD}/workdir"}
 
-export CLUSTER_VERSION="1.13"
-export CLUSTER_NAME="gcp"
 export CLUSTER="gcp"
-export CLUSTER_ZONE="us-central1-b"
 export ZONE="us-central1-b"
 export CLUSTER_KUBECONFIG=$WORK_DIR/central.context
 
@@ -30,7 +27,7 @@ echo "### "
 echo "### Begin Provision GKE"
 echo "### "
 
-gcloud beta container clusters create $CLUSTER_NAME --zone $CLUSTER_ZONE \
+gcloud beta container clusters create $CLUSTER --zone $ZONE \
     --addons=HorizontalPodAutoscaling,HttpLoadBalancing,Istio,CloudRun \
     --istio-config=auth=MTLS_PERMISSIVE \
     --username "admin" \
@@ -42,18 +39,17 @@ gcloud beta container clusters create $CLUSTER_NAME --zone $CLUSTER_ZONE \
     --enable-autoscaling --min-nodes 5 --max-nodes 10 \
     --network "default" \
     --enable-ip-alias \
-    --cluster-version=${CLUSTER_VERSION} \
     --cluster-version=latest \
     --enable-stackdriver-kubernetes \
     --identity-namespace=${PROJECT_ID}.svc.id.goog \
     --labels csm=
 
-gcloud container clusters get-credentials ${CLUSTER_NAME} --zone ${CLUSTER_ZONE}
+gcloud container clusters get-credentials ${CLUSTER} --zone ${ZONE}
 
-kubectx ${CLUSTER_NAME}=gke_${PROJECT}_${CLUSTER_ZONE}_${CLUSTER_NAME}
-kubectx ${CLUSTER_NAME}
+kubectx ${CLUSTER}=gke_${PROJECT}_${ZONE}_${CLUSTER}
+kubectx ${CLUSTER}
 
-KUBECONFIG= kubectl config view --minify --flatten --context=$CLUSTER_NAME > $CLUSTER_KUBECONFIG
+KUBECONFIG= kubectl config view --minify --flatten --context=$CLUSTER > $CLUSTER_KUBECONFIG
 
 kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user="$(gcloud config get-value core/account)"
 
