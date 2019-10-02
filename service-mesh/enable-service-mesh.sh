@@ -12,21 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 kubectx central
-bash <( gsutil cat gs://anthos-workshop/csm-alpha-onboard.sh )
-kubectl delete po $(kubectl get pod -n istio-system -l app=telemetry -o json | jq -r '.items[].metadata.name') -n istio-system
 
 # Enable the required GCP APIs for the topology view
 gcloud services enable iamcredentials.googleapis.com contextgraph.googleapis.com --project ${PROJECT}
 
 # Add a csm label for your cluster
-gcloud container clusters update $CLUSTER_NAME --zone ${CLUSTER_ZONE} --update-labels csm=
+gcloud container clusters update ${CLUSTER_NAME} --zone ${CLUSTER_ZONE} --update-labels csm=
 
 # Since we are using Istio 1.1 series, run the commands below to enable the adapter
 ACCOUNT=$(gcloud config get-value account)
 kubectl create clusterrolebinding cluster-admin-binding --clusterrole="cluster-admin" --user=${ACCOUNT}
 MESH_ID="${PROJECT}/${CLUSTER_ZONE}/${CLUSTER_NAME}"
 gsutil cat gs://csm-artifacts/stackdriver/stackdriver.istio_1_1.csm_beta.yaml | \
-sed 's@<mesh_uid>@'${MESH_ID}@g | kubectl apply -f -
+    sed 's@<mesh_uid>@'${MESH_ID}@g | kubectl apply -f -
 
 # Create a GSA for Istio’s Mixer component.  Workload Identity will use the permissions granted to this GSA.
 gcloud iam service-accounts create istio-mixer --display-name istio-mixer --project ${PROJECT}
