@@ -13,7 +13,7 @@ gsutil cat gs://csm-artifacts/stackdriver/stackdriver.istio.csm_beta.yaml | \
 sed 's@<mesh_uid>@'${MESH_ID}@g | kubectl apply -f -
 
 # ENABLE MIXER 
-#gcloud iam service-accounts create istio-mixer --display-name istio-mixer --project ${PROJECT_ID}
+gcloud iam service-accounts create istio-mixer --display-name istio-mixer --project ${PROJECT_ID}
 gcloud projects add-iam-policy-binding ${PROJECT_ID} --member=serviceAccount:istio-mixer@${PROJECT_ID}.iam.gserviceaccount.com --role=roles/contextgraph.asserter
 gcloud projects add-iam-policy-binding ${PROJECT_ID} --member=serviceAccount:istio-mixer@${PROJECT_ID}.iam.gserviceaccount.com --role=roles/logging.logWriter
 gcloud projects add-iam-policy-binding ${PROJECT_ID} --member=serviceAccount:istio-mixer@${PROJECT_ID}.iam.gserviceaccount.com --role=roles/monitoring.metricWriter
