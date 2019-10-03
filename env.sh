@@ -7,11 +7,13 @@ if [[ -z "$BASE_DIR" ]]; then
     echo "export WORK_DIR=\"$BASE_DIR/workdir\"" >> ~/.bashrc
     export PATH=$PATH:$WORK_DIR/bin:
     echo "export PATH=\"$PATH\"" >> ~/.bashrc
+    echo "cd $HOME/anthos-workshop" >> ~/.bashrc
 fi
 
 if [[ -z "$PROJECT" ]]; then
     export PROJECT=$(gcloud config get-value project)
     echo "export PROJECT=\"$(gcloud config get-value project)\"" >> ~/.bashrc
+    echo "gcloud config set project ${PROJECT}" >> ~/.bashrc
 fi
 
 if [[ -z "$ISTIO_VERSION" ]]; then
