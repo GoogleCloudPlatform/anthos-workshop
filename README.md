@@ -1,5 +1,7 @@
 # Anthos Workshop
 
+
+
 ## Overview
 Kubernetes is the de-facto standard for container orchestration*, and Google Kubernetes Engine (GKE) is a leader in the field of managed Kubernetes offerings. In 2018, Google brought Kubernetes to data centers with a new offering called _GKE On-Prem_, a [certified](https://github.com/cncf/k8s-conformance) and managed extension of the cloud-based GKE platform. Responding to significant early successes and listening to customer needs, Google has expanded its efforts to enable your modernization effort. 
 
