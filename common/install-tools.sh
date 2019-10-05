@@ -46,22 +46,14 @@ else
 fi
 
 ## Install Istio
-if [ -d "$WORK_DIR/istio-$ISTIO_VERSION" ]; then
-    if command -v istioctl 2>/dev/null; then
-		echo "Istio already installed."
-	else
-		echo "Downloading Istio..."
-		curl -L https://git.io/getLatestIstio | ISTIO_VERSION=$ISTIO_VERSION sh -
-		cp istio-$ISTIO_VERSION/bin/istioctl $WORK_DIR/bin/.
-		mv istio-$ISTIO_VERSION $WORK_DIR/ 
-	fi
+if [ -d "$WORK_DIR/istio-$ISTIO_VERSION" ] && [ -x "$(command -v istioctl)" ]; then
+	echo "Istio already installed."
 else
 	echo "Downloading Istio..."
 	curl -L https://git.io/getLatestIstio | ISTIO_VERSION=$ISTIO_VERSION sh -
 	cp istio-$ISTIO_VERSION/bin/istioctl $WORK_DIR/bin/.
 	mv istio-$ISTIO_VERSION $WORK_DIR/
 fi
-
 
 ## Install kops
 if command -v kops 2>/dev/null; then
@@ -73,9 +65,3 @@ else
 	mv kops-linux-amd64 $WORK_DIR/bin/kops
 	echo "kops installation complete."
 fi
-
-# Install yq.v2
-#curl -o yq.v2 -OL https://github.com/mikefarah/yq/releases/download/2.3.0/yq_linux_amd64
-#chmod +x yq.v2
-#mv yq.v2 $WORK_DIR/bin
-

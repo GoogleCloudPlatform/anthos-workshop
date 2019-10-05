@@ -13,15 +13,7 @@
 # limitations under the License.
 kubectx central
 
-# Enable the required GCP APIs for the topology view
-gcloud services enable iamcredentials.googleapis.com contextgraph.googleapis.com --project ${PROJECT}
-
-# Add a csm label for your cluster
-gcloud container clusters update ${CLUSTER_NAME} --zone ${CLUSTER_ZONE} --update-labels csm=
-
 # Since we are using Istio 1.1 series, run the commands below to enable the adapter
-ACCOUNT=$(gcloud config get-value account)
-kubectl create clusterrolebinding cluster-admin-binding --clusterrole="cluster-admin" --user=${ACCOUNT}
 MESH_ID="${PROJECT}/${CLUSTER_ZONE}/${CLUSTER_NAME}"
 gsutil cat gs://csm-artifacts/stackdriver/stackdriver.istio_1_1.csm_beta.yaml | \
     sed 's@<mesh_uid>@'${MESH_ID}@g | kubectl apply -f -
