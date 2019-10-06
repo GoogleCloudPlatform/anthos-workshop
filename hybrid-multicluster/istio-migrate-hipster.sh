@@ -19,7 +19,6 @@ echo "### Migrate all hipster to central cluster"
 echo "### "
 
 # Set vars for DIRs
-export ISTIO_VERSION=1.1.15
 export WORK_DIR=${WORK_DIR:="${PWD}/workdir"}
 export ISTIO_DIR=$WORK_DIR/istio-$ISTIO_VERSION
 export BASE_DIR=${BASE_DIR:="${PWD}/.."}

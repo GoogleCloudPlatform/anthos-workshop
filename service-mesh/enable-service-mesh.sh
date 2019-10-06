@@ -12,7 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 kubectx central
-bash <( gsutil cat gs://anthos-workshop/csm-alpha-onboard.sh )
+
+# Since we are using Istio 1.1 series, run the commands below to enable the adapter
+MESH_ID="${PROJECT}/${CLUSTER_ZONE}/${CLUSTER_NAME}"
+gsutil cat gs://csm-artifacts/stackdriver/stackdriver.istio_1_1.csm_beta.yaml | \
+    sed 's@<mesh_uid>@'${MESH_ID}@g | kubectl apply -f -
+
+# Create a GSA for Istio’s Mixer component.  Workload Identity will use the permissions granted to this GSA.
+gcloud iam service-accounts create istio-mixer --display-name istio-mixer --project ${PROJECT}
+
+# Grant the required permissions to Istio Mixer GSA. Those permissions are used for Istio sending telemetry data to Stackdriver.
+gcloud projects add-iam-policy-binding ${PROJECT} --member=serviceAccount:istio-mixer@${PROJECT}.iam.gserviceaccount.com --role=roles/contextgraph.asserter
+gcloud projects add-iam-policy-binding ${PROJECT} --member=serviceAccount:istio-mixer@${PROJECT}.iam.gserviceaccount.com --role=roles/logging.logWriter
+gcloud projects add-iam-policy-binding ${PROJECT} --member=serviceAccount:istio-mixer@${PROJECT}.iam.gserviceaccount.com --role=roles/monitoring.metricWriter
+
+# Allow the Kubernetes service account  to use Istio Mixer GSA by creating a Cloud IAM policy binding between them
+gcloud iam service-accounts add-iam-policy-binding --role roles/iam.workloadIdentityUser --member "serviceAccount:${PROJECT}.svc.id.goog[istio-system/istio-mixer-service-account]" istio-mixer@${PROJECT}.iam.gserviceaccount.com
+
+# Tell the Pod to use the GSA by adding an annotation to the Kubernetes service account, using the email address of Istio Mixer GSA.
+kubectl annotate serviceaccount --namespace istio-system istio-mixer-service-account iam.gke.io/gcp-service-account=istio-mixer@${PROJECT}.iam.gserviceaccount.com
+
+# Restarting the istio-telemetry to ensure metric and topology are being sent
 kubectl delete po $(kubectl get pod -n istio-system -l app=telemetry -o json | jq -r '.items[].metadata.name') -n istio-system
-
-

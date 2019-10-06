@@ -18,8 +18,6 @@
 export PROJECT=$(gcloud config get-value project)
 export WORK_DIR=${WORK_DIR:="${PWD}/workdir"}
 
-export ISTIO_VERSION=1.1.15
-
 ## Install Tools
 mkdir -p $WORK_DIR/bin
 
@@ -27,22 +25,43 @@ echo "### "
 echo "### Begin Tools install"
 echo "### "
 
+## Install tree
+if command -v tree 2>/dev/null; then
+	echo "tree already installed."
+else
+	echo "Installing tree..."
+	sudo apt-get install tree
+	sudo mv /usr/bin/tree $WORK_DIR/bin
+fi
+
 ## Install kubectx
-curl -sLO https://raw.githubusercontent.com/ahmetb/kubectx/master/kubectx 
-chmod +x kubectx 
-mv kubectx $WORK_DIR/bin
+if command -v kubectx 2>/dev/null; then
+	echo "kubectx already installed."
+else
+	echo "Installing kubectx..."
+	curl -sLO https://raw.githubusercontent.com/ahmetb/kubectx/"$KUBECTX_VERSION"/kubectx 
+	chmod +x kubectx 
+	mv kubectx $WORK_DIR/bin
+	echo "kubectx installation complete."
+fi
 
-# Download Istio
-curl -L https://git.io/getLatestIstio | ISTIO_VERSION=$ISTIO_VERSION sh -
-cp istio-$ISTIO_VERSION/bin/istioctl $WORK_DIR/bin/.
-mv istio-$ISTIO_VERSION $WORK_DIR/
+## Install Istio
+if [ -d "$WORK_DIR/istio-$ISTIO_VERSION" ] && [ -x "$(command -v istioctl)" ]; then
+	echo "Istio already installed."
+else
+	echo "Downloading Istio..."
+	curl -L https://git.io/getLatestIstio | ISTIO_VERSION=$ISTIO_VERSION sh -
+	cp istio-$ISTIO_VERSION/bin/istioctl $WORK_DIR/bin/.
+	mv istio-$ISTIO_VERSION $WORK_DIR/
+fi
 
-# Install yq.v2
-#curl -o yq.v2 -OL https://github.com/mikefarah/yq/releases/download/2.3.0/yq_linux_amd64
-#chmod +x yq.v2
-#mv yq.v2 $WORK_DIR/bin
-
-
-
-
-
+## Install kops
+if command -v kops 2>/dev/null; then
+	echo "kops already installed."
+else
+	echo "Installing kops..."
+	curl -sLO https://github.com/kubernetes/kops/releases/download/$KOPS_VERSION/kops-linux-amd64
+	chmod +x kops-linux-amd64
+	mv kops-linux-amd64 $WORK_DIR/bin/kops
+	echo "kops installation complete."
+fi
