@@ -28,16 +28,17 @@ echo "### "
 echo "### Begin Provision GKE"
 echo "### "
 
+# GKE cluster with workload identity, needed for ASM beta
 gcloud beta container clusters create $CLUSTER --zone $ZONE \
     --addons=HorizontalPodAutoscaling,HttpLoadBalancing,Istio,CloudRun \
     --istio-config=auth=MTLS_PERMISSIVE \
     --username "admin" \
-    --machine-type "n1-standard-8" \
+    --machine-type "n1-standard-4" \
     --image-type "COS" \
     --disk-size "100" \
     --scopes "https://www.googleapis.com/auth/compute","https://www.googleapis.com/auth/devstorage.read_only","https://www.googleapis.com/auth/logging.write","https://www.googleapis.com/auth/monitoring","https://www.googleapis.com/auth/servicecontrol","https://www.googleapis.com/auth/service.management.readonly","https://www.googleapis.com/auth/trace.append" \
-    --num-nodes "5" \
-    --enable-autoscaling --min-nodes 5 --max-nodes 10 \
+    --num-nodes "4" \
+    --enable-autoscaling --min-nodes 3 --max-nodes 6 \
     --network "default" \
     --enable-ip-alias \
     --cluster-version=${CLUSTER_VERSION} \

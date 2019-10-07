@@ -211,7 +211,7 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
         kubectl apply -f https://storage.googleapis.com/cloud-run-on-anthos/install/0.7.0/2-knative-0.7.0-local-gateway.yaml
         kubectl apply --filename https://github.com/knative/serving/releases/download/v0.7.0/serving.yaml --selector knative.dev/crd-install=true
         kubectl apply --filename https://github.com/knative/serving/releases/download/v0.7.0/serving.yaml --selector networking.knative.dev/certificate-provider!=cert-manager
-        kubectl apply -f anthos-workshop/cluster-local-gateway.yaml # In cloud shell
+        kubectl apply -f anthos-workshop/cloud-run/cloud-run-gke/cluster-local-gateway.yaml # In cloud shell
     fi
 
 ## Install Hipster on GKE
