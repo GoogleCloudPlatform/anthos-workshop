@@ -1,46 +1,28 @@
 # Base dirs
-if [[ -z "$BASE_DIR" ]]; then
     export BASE_DIR=$(pwd)
     export WORK_DIR=$BASE_DIR/workdir
     export PATH=$PATH:$WORK_DIR/bin:
-    echo "export BASE_DIR=\"$(pwd)\"" >> ~/.bashrc
-    echo "export WORK_DIR=\"$BASE_DIR/workdir\"" >> ~/.bashrc
-    echo "export PATH=\"$PATH\"" >> ~/.bashrc
-fi
+
 
 # GCP project
-if [[ -z "$PROJECT" ]]; then
     export PROJECT=$(gcloud config get-value project)
-    echo "export PROJECT=\"$(gcloud config get-value project)\"" >> ~/.bashrc
-    echo "gcloud config set project ${PROJECT}" >> ~/.bashrc
-fi
+
 
 # Tools versions
-if [[ -z "$ISTIO_VERSION" ]]; then
-    export ISTIO_VERSION=1.1.15
+    export ISTIO_VERSION=1.3.2
     export KUBECTX_VERSION=v0.7.0
     export HELM_VERSION=v2.14.3
-    export CLUSTER_VERSION=1.13
+    export CLUSTER_VERSION=1.14.6-gke.2
     export KOPS_VERSION=1.12.3
-    echo 'export ISTIO_VERSION="1.1.15"' >> ~/.bashrc
-    echo 'export KUBECTX_VERSION="v0.7.0"' >> ~/.bashrc
-    echo 'export HELM_VERSION="v2.14.3"' >> ~/.bashrc
-    echo 'export CLUSTER_VERSION="1.13"' >> ~/.bashrc
-    echo 'export KOPS_VERSION="1.12.3"' >> ~/.bashrc
-fi
+
 
 ## Setting variables for GKE
-if [[ -z "$CLUSTER_NAME" ]]; then
     export CLUSTER_NAME="central"
     export CLUSTER_ZONE="us-central1-b"
     export CLUSTER_KUBECONFIG=$WORK_DIR/$CLUSTER_NAME.context
-    echo 'export CLUSTER_NAME="central"' >> ~/.bashrc
-    echo 'export CLUSTER_ZONE="us-central1-b"' >> ~/.bashrc
-    echo "export CLUSTER_KUBECONFIG=\"$WORK_DIR/$CLUSTER_NAME.context\"" >> ~/.bashrc
-fi
+
 
 # Variables for remote kops cluster
-if [[ -z "$REMOTE_CLUSTER_NAME_BASE" ]]; then
     export REMOTE_CLUSTER_NAME_BASE="remote"
     export REMOTE_CLUSTER_NAME=$REMOTE_CLUSTER_NAME_BASE.k8s.local
     export KOPS_STORE=gs://$PROJECT-kops-$REMOTE_CLUSTER_NAME_BASE
@@ -50,27 +32,12 @@ if [[ -z "$REMOTE_CLUSTER_NAME_BASE" ]]; then
     export ZONES=us-central1-a
     export INSTANCE_IP=$(curl -s api.ipify.org)
     export INSTANCE_CIDR=$INSTANCE_IP/32
-    echo 'export REMOTE_CLUSTER_NAME_BASE="remote"' >> ~/.bashrc
-    echo "export REMOTE_CLUSTER_NAME=\"$REMOTE_CLUSTER_NAME_BASE.k8s.local\"" >> ~/.bashrc
-    echo "export KOPS_STORE=\"gs://$PROJECT-kops-$REMOTE_CLUSTER_NAME_BASE\"" >> ~/.bashrc
-    echo "export REMOTE_KUBECONFIG=\"$WORK_DIR/remote.context\"" >> ~/.bashrc
-    echo 'export NODE_COUNT="3"' >> ~/.bashrc
-    echo 'export NODE_SIZE="n1-standard-4"' >> ~/.bashrc
-    echo 'export ZONES="us-central1-a"' >> ~/.bashrc
-    echo 'export INSTANCE_IP=$(curl -s api.ipify.org)' >> ~/.bashrc
-    echo 'export INSTANCE_CIDR=$INSTANCE_IP/32' >> ~/.bashrc
-fi
 
 # Variables for config manager 
-if [[ -z "$OPERATOR_YAML_LOCATION" ]]; then
     export OPERATOR_YAML_LOCATION=$(gsutil cat gs://anthos-workshop/cfg-op-loc)
-    echo "export OPERATOR_YAML_LOCATION=\"$(gsutil cat gs://anthos-workshop/cfg-op-loc)\"" >> ~/.bashrc
-fi
+
 
 # Variables for istio
-if [[ -z "$ISTIO_DIR" ]]; then
     export ISTIO_DIR=$WORK_DIR/istio-$ISTIO_VERSION
     export ISTIO_CONFIG_DIR="$BASE_DIR/hybrid-multicluster/istio"
-    echo "export ISTIO_DIR=\"$WORK_DIR/istio-$ISTIO_VERSION\"" >> ~/.bashrc
-    echo "export ISTIO_CONFIG_DIR=\"$BASE_DIR/hybrid-multicluster/istio\"" >> ~/.bashrc
-fi
+
