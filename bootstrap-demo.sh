@@ -179,14 +179,7 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
 
 
 
-## Install Istio
-
-    # # GKE - NOTE - USING ADD-ON
-    # shopt -s nocasematch
-    # if [[ ${GKE_CLUSTER} == y ]]; then
-    #     kubectx gcp && ./hybrid-multicluster/istio-install-single.sh
-    # fi
-
+## Install Istio on remote cluster(s)
 
     # GCE
     shopt -s nocasematch
@@ -206,12 +199,9 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     if [[ ${KOPS_GCE} == y ]]; then
         kubectx ${GCE_CONTEXT}
         kubectl create namespace gke-system
-        # kubectl apply -f https://storage.googleapis.com/cloud-run-on-anthos/install/0.7.0/1-cluster-local-gateway.yaml
-        kubectl apply -f https://storage.googleapis.com/cloud-run-on-anthos/install/0.7.0/2-knative-0.7.0-local-gateway.yaml --selector knative.dev/crd-install=true
-        kubectl apply -f https://storage.googleapis.com/cloud-run-on-anthos/install/0.7.0/2-knative-0.7.0-local-gateway.yaml
-        kubectl apply --filename https://github.com/knative/serving/releases/download/v0.7.0/serving.yaml --selector knative.dev/crd-install=true
-        kubectl apply --filename https://github.com/knative/serving/releases/download/v0.7.0/serving.yaml --selector networking.knative.dev/certificate-provider!=cert-manager
-        kubectl apply -f anthos-workshop/cloud-run/cloud-run-gke/cluster-local-gateway.yaml # In cloud shell
+        kubectl apply -f anthos-workshop/cloud-run/cloud-run-gke/cluster-local-gateway.yaml
+        kubectl apply -f https://storage.googleapis.com/cloud-run-for-anthos/install/0.9.0/2-cloudrun.yaml --selector knative.dev/crd-install=true
+        kubectl apply -f https://storage.googleapis.com/cloud-run-for-anthos/install/0.9.0/2-cloudrun.yaml
     fi
 
 ## Install Hipster on GKE

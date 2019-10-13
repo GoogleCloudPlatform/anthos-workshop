@@ -15,7 +15,7 @@
 # limitations under the License.
 
 source ./env
-source $BASE_DIR/common/manage-state.sh 
+source $BASE_DIR/common/manage-state.sh
 load_state
 
 export PROJECT=$(gcloud config get-value project)
@@ -25,27 +25,30 @@ echo "WORK_DIR set to $WORK_DIR"
 
 gcloud config set project $PROJECT
 
-# Clean up resources in the background and wait for completion
+# Delete source repo
+gcloud source repos delete config-repo
 
+# Clean up resources in the background and wait for completion
 
 shopt -s nocasematch
 if [[ ${KOPS_AWS} == y ]]; then
     export CONTEXT=$AWS_CONTEXT && ./connect-hub/cleanup-hub.sh
-    ./connect-hub/cleanup-remote-aws.sh 
+    ./connect-hub/cleanup-remote-aws.sh
 fi
 
 shopt -s nocasematch
 if [[ ${KOPS_GCE} == y ]]; then
     export CONTEXT=$GCE_CONTEXT && ./connect-hub/cleanup-hub.sh
-    ./connect-hub/cleanup-remote-gce.sh 
+    ./connect-hub/cleanup-remote-gce.sh
 fi
 
 shopt -s nocasematch
 if [[ ${GKE_CLUSTER} == y ]]; then
     ./gke/cleanup-gke.sh
 fi
- 
 
+# Delete kops storage bucket
+gsutil rm -r gs://kbcn-alpha10-kops-onprem/
 
 rm -rf $WORK_DIR
 

@@ -18,7 +18,6 @@
 export PROJECT=$(gcloud config get-value project)
 export WORK_DIR=${WORK_DIR:="${PWD}/workdir"}
 
-#export REMOTE_CLUSTER_NAME_BASE="remote-g"
 export REMOTE_CLUSTER_NAME_BASE=${GCE_CONTEXT:-"onprem"}
 
 export REMOTE_CLUSTER_NAME=$REMOTE_CLUSTER_NAME_BASE.k8s.local
