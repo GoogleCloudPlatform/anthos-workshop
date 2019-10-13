@@ -18,7 +18,7 @@
 
 
 export CLUSTER_NAME=$(kubectl config current-context)
-export REPO_URL="git@github.com:murog/hipster.git"
+export REPO_URL=${REPO_URL:-"https://github.com/cgrant/config-repo"}
 export REPO_BRANCH=${REPO_BRANCH:-"master"}
 export AUTH_TYPE=ssh
 

@@ -75,7 +75,7 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
 
         # Config repo source
 
-        read -e -p "Config Repo Source [https://github.com/askmeegs/hipster]:" reposource
+        read -e -p "Config Repo Source [https://github.com/cgrant/config-repo]:" reposource
         export REPO_URL=${reposource:-"$REPO_URL"}
         read -e -p "Config Repo Branch [master]:" repobranch
         export REPO_BRANCH=${repobranch:-"$REPO_BRANCH"}
