@@ -119,7 +119,6 @@ subjects:
 apiVersion: v1
 kind: Service
 metadata:
-  annotations: null
   labels:
     app: cluster-local-gateway
     chart: gateways
