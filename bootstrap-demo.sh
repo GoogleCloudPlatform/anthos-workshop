@@ -75,14 +75,10 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
 
         # Config repo source
 
-        read -e -p "Config Repo Source [https://github.com/cgrant/config-repo]:" reposource
+        read -e -p "Config Repo Source [https://github.com/cgrant/hipster]:" reposource
         export REPO_URL=${reposource:-"$REPO_URL"}
         read -e -p "Config Repo Branch [master]:" repobranch
         export REPO_BRANCH=${repobranch:-"$REPO_BRANCH"}
-
-        # Deploy Hipster?
-        read -e -p "Deploy hipster with kubectl? (Y/N) [y]:" deployhip
-        export DEPLOY_HIPSTER=${deployhip:-"y"}
     fi
 
     ## Get user provided Keys
@@ -177,8 +173,6 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     fi
 
 
-
-
 ## Install Istio on remote cluster(s)
 
     # GCE
@@ -203,13 +197,6 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
         kubectl apply -f https://storage.googleapis.com/cloud-run-for-anthos/install/0.9.0/2-cloudrun.yaml --selector knative.dev/crd-install=true
         kubectl apply -f https://storage.googleapis.com/cloud-run-for-anthos/install/0.9.0/2-cloudrun.yaml
     fi
-
-## Install Hipster on GKE
-    shopt -s nocasematch
-    if [[ ${DEPLOY_HIPSTER} == y ]]; then
-        ./hybrid-multicluster/deploy-hipster-single.sh
-    fi
-
 
 ## Enable ASM on GCP cluster
     ./service-mesh/enable-service-mesh.sh
