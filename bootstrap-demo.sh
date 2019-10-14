@@ -136,7 +136,8 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     gcloud services enable sourcerepo.googleapis.com
     source ./config-management/create-repo.sh
 
-    gsutil cp gs://anthos-workshop-pc/acm $HOME/.ssh/id_rsa.nomos
+   # github ACM repos only
+   # gsutil cp gs://anthos-workshop-pc/acm $HOME/.ssh/id_rsa.nomos
 
 
     GCLOUD_ACCOUNT=$(gcloud config get-value account)
