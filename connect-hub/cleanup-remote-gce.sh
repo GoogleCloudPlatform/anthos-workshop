@@ -20,13 +20,13 @@ export WORK_DIR=${WORK_DIR:="${PWD}/workdir"}
 export PATH=$PATH:$WORK_DIR/bin:
 
 
-export REMOTE_CLUSTER_NAME_BASE=${GCE_CONTEXT:-"remote"}
+export REMOTE_CLUSTER_NAME_BASE=${GCE_CONTEXT:-"onprem"}
 export REMOTE_CLUSTER_NAME=$REMOTE_CLUSTER_NAME_BASE.k8s.local
 export KOPS_STORE=gs://$PROJECT-kops-$REMOTE_CLUSTER_NAME_BASE
 
 kops delete cluster --name $REMOTE_CLUSTER_NAME --state $KOPS_STORE --yes
 
-kubectx -d $REMOTE_CLUSTER_NAME_BASE 
+kubectx -d $REMOTE_CLUSTER_NAME_BASE
 
 gsutil -m rm -r $KOPS_STORE
 

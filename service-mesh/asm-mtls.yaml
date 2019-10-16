@@ -1,0 +1,65 @@
+apiVersion: "authentication.istio.io/v1alpha1"
+kind: "Policy"
+metadata:
+  name: "adservice"
+  namespace: onlineboutique
+spec:
+  targets:
+  - name: adservice
+  peers:
+  - mtls: {}
+---
+apiVersion: "networking.istio.io/v1alpha3"
+kind: "DestinationRule"
+metadata:
+  name: "adservice"
+  namespace: onlineboutique
+spec:
+  host: "adservice.onlineboutique.svc.cluster.local"
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+---
+apiVersion: "authentication.istio.io/v1alpha1"
+kind: "Policy"
+metadata:
+  name: "recommendationsservice"
+  namespace: onlineboutique
+spec:
+  targets:
+  - name: recommendationsservice
+  peers:
+  - mtls: {}
+---
+apiVersion: "networking.istio.io/v1alpha3"
+kind: "DestinationRule"
+metadata:
+  name: "recommendationsservice"
+  namespace: onlineboutique
+spec:
+  host: "recommendationsservice.onlineboutique.svc.cluster.local"
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+---
+apiVersion: "authentication.istio.io/v1alpha1"
+kind: "Policy"
+metadata:
+  name: "productcatalogservice"
+  namespace: onlineboutique
+spec:
+  targets:
+  - name: productcatalogservice
+  peers:
+  - mtls: {}
+---
+apiVersion: "networking.istio.io/v1alpha3"
+kind: "DestinationRule"
+metadata:
+  name: "productcatalogservice"
+  namespace: onlineboutique
+spec:
+  host: "productcatalogservice.onlineboutique.svc.cluster.local"
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL

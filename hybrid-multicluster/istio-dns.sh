@@ -22,7 +22,7 @@ echo "### "
 # Install configmap for kube-dns to send 'global' domain to CoreDNS pod IP
 # This means that any DNS name that ends with .global will be resolved using CoreDNS instead of kube-dns
 # Install in central cluster
-kubectx central
+kubectx gcp
 kubectl apply -f - <<EOF
 apiVersion: v1
 kind: ConfigMap
@@ -31,11 +31,11 @@ metadata:
   namespace: kube-system
 data:
   stubDomains: |
-    {"global": ["$(kubectl --context central get svc -n istio-system istiocoredns -o jsonpath={.spec.clusterIP})"]}
+    {"global": ["$(kubectl --context gcp get svc -n istio-system istiocoredns -o jsonpath={.spec.clusterIP})"]}
 EOF
 
-# Install in central cluster
-kubectx remote
+# Install in remote cluster
+kubectx onprem
 kubectl apply -f - <<EOF
 apiVersion: v1
 kind: ConfigMap
@@ -44,5 +44,5 @@ metadata:
   namespace: kube-system
 data:
   stubDomains: |
-    {"global": ["$(kubectl --context remote get svc -n istio-system istiocoredns -o jsonpath={.spec.clusterIP})"]}
+    {"global": ["$(kubectl --context onprem get svc -n istio-system istiocoredns -o jsonpath={.spec.clusterIP})"]}
 EOF

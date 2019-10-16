@@ -17,7 +17,7 @@
 # Variables
 INSTANCE_IP=$(curl -s api.ipify.org)
 INSTANCE_CIDR=$INSTANCE_IP/32
-ARRAY=("https-api-remote-k8s-local" "ssh-external-to-master-remote-k8s-local" "ssh-external-to-node-remote-k8s-local")
+ARRAY=("https-api-onprem-k8s-local" "ssh-external-to-master-onprem-k8s-local" "ssh-external-to-node-onprem-k8s-local")
 
 for item in ${ARRAY[@]}
 do

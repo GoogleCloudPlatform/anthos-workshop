@@ -6,7 +6,7 @@ git config --global user.name "$USER"
 
 export PROJECT=$(gcloud config get-value project)
 export REPO_URL=${REPO_URL:-"https://github.com/cgrant/hipster"}
-export REPO_BRANCH=${REPO_BRANCH:-"next2019"}
+export REPO_BRANCH=${REPO_BRANCH:-"master"}
 
 cd $HOME
 export GCLOUD_ACCOUNT=$(gcloud config get-value account)

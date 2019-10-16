@@ -15,7 +15,7 @@
 # limitations under the License.
 
 source ./env
-source $BASE_DIR/common/manage-state.sh 
+source $BASE_DIR/common/manage-state.sh
 load_state
 export PROJECT=$(gcloud config get-value project)
 export WORK_DIR=${WORK_DIR:="${PWD}/workdir"}
@@ -29,7 +29,7 @@ gcloud config set project $PROJECT
 shopt -s nocasematch
 if [[ ${KOPS_AWS} == y ]]; then
     export CONTEXT=$AWS_CONTEXT && ./connect-hub/cleanup-hub.sh
-    ./connect-hub/cleanup-remote-aws.sh 
+    ./connect-hub/cleanup-remote-aws.sh
 fi
 
 
@@ -37,28 +37,28 @@ fi
 
 ## Reprovision
   # Kops on AWS?
-    read -e -p "Kops on AWS? (Y/N) [${KOPS_AWS:-$KOPS_AWS}]:" kopsa 
+    read -e -p "Kops on AWS? (Y/N) [${KOPS_AWS:-$KOPS_AWS}]:" kopsa
     export KOPS_AWS=${kopsa:-"$KOPS_AWS"}
     shopt -s nocasematch
     if [[ ${KOPS_AWS} == y ]]; then
 
         # AWS ID
-        read -e -p "AWS_ACCESS_KEY_ID [${AWS_ACCESS_KEY_ID:-$AWS_ACCESS_KEY_ID}]:" id 
+        read -e -p "AWS_ACCESS_KEY_ID [${AWS_ACCESS_KEY_ID:-$AWS_ACCESS_KEY_ID}]:" id
         export AWS_ACCESS_KEY_ID=${id:-"$AWS_ACCESS_KEY_ID"}
-        
+
         # AWS Key
-        read -e -p "AWS_SECRET_ACCESS_KEY [${AWS_SECRET_ACCESS_KEY:-$AWS_SECRET_ACCESS_KEY}]:" key 
+        read -e -p "AWS_SECRET_ACCESS_KEY [${AWS_SECRET_ACCESS_KEY:-$AWS_SECRET_ACCESS_KEY}]:" key
         export AWS_SECRET_ACCESS_KEY=${key:-"$AWS_SECRET_ACCESS_KEY"}
 
         # AWS Context name
         read -e -p 'AWS_CONTEXT [external]:' key
-        export AWS_CONTEXT=${key:-"external"} 
-        
+        export AWS_CONTEXT=${key:-"external"}
+
         # AWS Uniquee Bucket Suffix
         read -e -p "New Bucket Suffix - Last used was [${AWS_RND}]:" rnd
-        export AWS_RND=${rnd:-"${AWS_RND}"} 
+        export AWS_RND=${rnd:-"${AWS_RND}"}
     fi
-    
+
     write_state
 
 
@@ -79,11 +79,11 @@ fi
 # Config Management
     shopt -s nocasematch
     if [[ ${KOPS_AWS} == y ]]; then
-        kubectx ${AWS_CONTEXT} && kubectl create secret generic git-creds --namespace=config-management-system --from-file=ssh=$HOME/.ssh/id_rsa.nomos  
+        kubectx ${AWS_CONTEXT} && kubectl create secret generic git-creds --namespace=config-management-system --from-file=ssh=$HOME/.ssh/id_rsa.nomos
         kubectx ${AWS_CONTEXT} && ./config-management/install-config-operator.sh
         kubectx ${AWS_CONTEXT} && ./config-management/install-config-sync.sh
     fi
-    
+
 
 
   # Remote
@@ -91,4 +91,3 @@ fi
     if [[ ${KOPS_AWS} == y ]]; then
         export CONTEXT=$AWS_CONTEXT && ./connect-hub/connect-hub.sh
     fi
-    

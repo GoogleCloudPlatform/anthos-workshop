@@ -16,43 +16,46 @@
 
 # Variables
 export PROJECT=$(gcloud config get-value project)
+export PROJECT_ID=${PROJECT}
 export WORK_DIR=${WORK_DIR:="${PWD}/workdir"}
 
-export CLUSTER_VERSION="1.12"
-export CLUSTER_NAME="central"
-export CLUSTER_ZONE="us-central1-b"
+export CLUSTER="gcp"
+export CLUSTER_VERSION="1.13"
+export ZONE="us-central1-b"
 export CLUSTER_KUBECONFIG=$WORK_DIR/central.context
 
 echo "### "
 echo "### Begin Provision GKE"
 echo "### "
 
-
-gcloud beta container clusters create $CLUSTER_NAME --zone $CLUSTER_ZONE \
+# GKE cluster with workload identity, needed for ASM beta
+gcloud beta container clusters create $CLUSTER --zone $ZONE \
+    --addons=HorizontalPodAutoscaling,HttpLoadBalancing,Istio,CloudRun \
+    --istio-config=auth=MTLS_PERMISSIVE \
     --username "admin" \
-    --machine-type "n1-standard-2" \
+    --machine-type "n1-standard-4" \
     --image-type "COS" \
     --disk-size "100" \
     --scopes "https://www.googleapis.com/auth/compute","https://www.googleapis.com/auth/devstorage.read_only","https://www.googleapis.com/auth/logging.write","https://www.googleapis.com/auth/monitoring","https://www.googleapis.com/auth/servicecontrol","https://www.googleapis.com/auth/service.management.readonly","https://www.googleapis.com/auth/trace.append" \
     --num-nodes "4" \
-    --enable-autoscaling --min-nodes 4 --max-nodes 8 \
+    --enable-autoscaling --min-nodes 3 --max-nodes 6 \
     --network "default" \
-    --enable-cloud-logging \
-    --enable-cloud-monitoring \
     --enable-ip-alias \
     --cluster-version=${CLUSTER_VERSION} \
-    --enable-stackdriver-kubernetes
+    --enable-stackdriver-kubernetes \
+    --identity-namespace=${PROJECT_ID}.svc.id.goog \
+    --labels csm=
 
-gcloud container clusters get-credentials ${CLUSTER_NAME} --zone ${CLUSTER_ZONE}
+gcloud container clusters get-credentials ${CLUSTER} --zone ${ZONE}
 
-kubectx ${CLUSTER_NAME}=gke_${PROJECT}_${CLUSTER_ZONE}_${CLUSTER_NAME}
-kubectx ${CLUSTER_NAME}
+kubectx ${CLUSTER}=gke_${PROJECT}_${ZONE}_${CLUSTER}
+kubectx ${CLUSTER}
 
-KUBECONFIG= kubectl config view --minify --flatten --context=$CLUSTER_NAME > $CLUSTER_KUBECONFIG
+KUBECONFIG= kubectl config view --minify --flatten --context=$CLUSTER > $CLUSTER_KUBECONFIG
 
 kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user="$(gcloud config get-value core/account)"
 
-    
+
 
 
 

@@ -25,12 +25,12 @@ echo "BASE_DIR set to $BASE_DIR"
 export ISTIO_CONFIG_DIR="$BASE_DIR/hybrid-multicluster/istio"
 
 # Get Istio ingress gateway Ip addresses from  central
-export GWIP_CENTRAL=$(kubectl --context central get -n istio-system service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+export GWIP_CENTRAL=$(kubectl --context gcp get -n istio-system service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
 
 # Prepare central cluster hipster manifests
 # change context to central cluster
-kubectx central
-# Prepare the service-entries yaml to add the remote cluster istio ingress gateway IP 
+kubectx gcp
+# Prepare the service-entries yaml to add the remote cluster istio ingress gateway IP
 export pattern='.*- address:.*'
 export replace="  - address: "$GWIP_CENTRAL""
 sed -r -i "s|$pattern|$replace|g" ${ISTIO_CONFIG_DIR}/central/service-entries.yaml
@@ -41,4 +41,4 @@ kubectl label namespace hipster2 istio-injection=enabled
 
 
 kubectl apply -n hipster2  -f ${ISTIO_CONFIG_DIR}/central
-kubectl apply -n hipster2  -f ${ISTIO_CONFIG_DIR}/hipster 
+kubectl apply -n hipster2  -f ${ISTIO_CONFIG_DIR}/hipster

@@ -15,7 +15,7 @@
 # limitations under the License.
 
 # Variables
-export REMOTE_CLUSTER_NAME_BASE=${CONTEXT:-"remote"}
+export REMOTE_CLUSTER_NAME_BASE=${CONTEXT:-"onprem"}
 export REMOTE_CLUSTER_NAME=$REMOTE_CLUSTER_NAME_BASE.k8s.local
 
 gcloud alpha container hub unregister-cluster --context=$REMOTE_CLUSTER_NAME_BASE

@@ -15,7 +15,7 @@
 # limitations under the License.
 
 CIDR_REGEX="^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/([0-9]|[1-2][0-9]|3[0-2]))?$"
-CENTRAL_REGEX="gke-central-default*"
+CENTRAL_REGEX="gke-gcp-default*"
 REMOTE_REGEX="nodes-*"
 CIDR_RANGE="/32"
 FIREWALL_FILTER="tcp:15020,tcp:80,tcp:443,tcp:31400,tcp:15029,tcp:15030,tcp:15031,tcp:15032,tcp:15443"
@@ -30,14 +30,14 @@ fi
 # grab the ip of the cloud shell instance
 SHELL_IP=$(curl -s api.ipify.org)$CIDR_RANGE
 
-# grab the ips for central 
+# grab the ips for central
 CENTRAL_IPS=$(gcloud compute instances list --filter="name~'$CENTRAL_REGEX'" --format="value(networkInterfaces[0].accessConfigs[0].natIP)")
 # grab the ips for remote
 REMOTE_IPS=$(gcloud compute instances list --filter="name~'$REMOTE_REGEX'" --format="value(networkInterfaces[0].accessConfigs[0].natIP)")
 
 # combine ips
 IPS="$CENTRAL_IPS $REMOTE_IPS"
-# append /32 to each ip 
+# append /32 to each ip
 IPS=$(printf "%s$CIDR_RANGE," $IPS)
 
 # combine all ips

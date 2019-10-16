@@ -18,8 +18,7 @@
 export PROJECT=$(gcloud config get-value project)
 export WORK_DIR=${WORK_DIR:="${PWD}/workdir"}
 
-#export REMOTE_CLUSTER_NAME_BASE="remote-g"
-export REMOTE_CLUSTER_NAME_BASE=${GCE_CONTEXT:-"remote"}
+export REMOTE_CLUSTER_NAME_BASE=${GCE_CONTEXT:-"onprem"}
 
 export REMOTE_CLUSTER_NAME=$REMOTE_CLUSTER_NAME_BASE.k8s.local
 export KOPS_STORE=gs://$PROJECT-kops-$REMOTE_CLUSTER_NAME_BASE
@@ -50,7 +49,7 @@ gsutil mb $KOPS_STORE
 n=0
 until [ $n -ge 5 ]
 do
-    gsutil ls | grep $KOPS_STORE && break 
+    gsutil ls | grep $KOPS_STORE && break
     n=$[$n+1]
     sleep 3
 done
@@ -64,8 +63,8 @@ kops create cluster \
 	--node-size=$NODE_SIZE \
 	--admin-access=$INSTANCE_CIDR \
 	--yes
-    # --master-size $MASTER_SIZE --master-count 3 
-     
+    # --master-size $MASTER_SIZE --master-count 3
+
 
 KUBECONFIG= kubectl config view --minify --flatten --context=$REMOTE_CLUSTER_NAME > $REMOTE_KUBECONFIG
 

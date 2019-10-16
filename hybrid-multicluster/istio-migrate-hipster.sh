@@ -27,16 +27,16 @@ echo "BASE_DIR set to $BASE_DIR"
 export ISTIO_CONFIG_DIR="$BASE_DIR/hybrid-multicluster/istio"
 
 # Install all of the deployments, services and necessary serviceentries on central cluster
-# The following folder contains 
+# The following folder contains
 # - All of the deployments for hipster app
 # - Correct ENV values for deployments to point to vaious microservices
 # - All of the services for hipster app
 # - A service entry required for currency service to function
 
-kubectx central
-kubectl apply -n hipster2  -f ${ISTIO_CONFIG_DIR}/hipster 
+kubectx gcp
+kubectl apply -n hipster2  -f ${ISTIO_CONFIG_DIR}/hipster
 kubectl delete -n hipster2 -f ${ISTIO_CONFIG_DIR}/central/service-entries.yaml
 
 # Delete remaining Hipster workloads, services, serviceentries and namespace hipster1 from remote cluster
-kubectx remote
+kubectx onprem
 kubectl delete -n hipster1  -f ${ISTIO_CONFIG_DIR}/remote

@@ -11,18 +11,18 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-apiVersion: addons.sigs.k8s.io/v1alpha1
+apiVersion: configmanagement.gke.io/v1
 kind: ConfigManagement
 metadata:
     name: config-management
     namespace: config-management-system
 spec:
   clusterName: <CLUSTER_NAME>  
+  channel: dev
+  policyController:
+    enabled: true
   git:
     syncRepo: <REPO_URL>
     syncBranch: master
-    secretType: none
-    policyDir: "."
+    secretType: ssh
     syncWait: 2
-  enableAggregateNamespaceQuotas: true
-  enableHierarchicalResourceQuota: true

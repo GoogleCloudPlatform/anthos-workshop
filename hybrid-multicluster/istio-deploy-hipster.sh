@@ -25,13 +25,13 @@ echo "BASE_DIR set to $BASE_DIR"
 export ISTIO_CONFIG_DIR="$BASE_DIR/hybrid-multicluster/istio"
 
 # Get Istio ingress gateway Ip addresses from both central and remote clusters
-export GWIP_CENTRAL=$(kubectl --context central get -n istio-system service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-export GWIP_REMOTE=$(kubectl --context remote get -n istio-system service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+export GWIP_CENTRAL=$(kubectl --context gcp get -n istio-system service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+export GWIP_REMOTE=$(kubectl --context onprem get -n istio-system service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
 
 # Prepare central cluster hipster manifests
 # change context to central cluster
-kubectx central
-# Prepare the service-entries yaml to add the remote cluster istio ingress gateway IP 
+kubectx gcp
+# Prepare the service-entries yaml to add the remote cluster istio ingress gateway IP
 # for all services running in the remote cluster
 export pattern='.*- address:.*'
 export replace="  - address: "$GWIP_REMOTE""
@@ -46,8 +46,8 @@ kubectl apply -n hipster2  -f ${ISTIO_CONFIG_DIR}/central
 
 # Prepare remote cluster hipster manifests
 # change context to central cluster
-kubectx remote
-# Prepare the service-entries yaml to add the remote cluster istio ingress gateway IP 
+kubectx onprem
+# Prepare the service-entries yaml to add the remote cluster istio ingress gateway IP
 # for all services running in the remote cluster
 export pattern='.*- address:.*'
 export replace="  - address: "$GWIP_CENTRAL""
@@ -57,5 +57,5 @@ sed -r -i "s|$pattern|$replace|g" ${ISTIO_CONFIG_DIR}/remote/service-entries.yam
 kubectl create namespace hipster1
 kubectl label namespace hipster1 istio-injection=enabled
 
-# Deploy part of hipster app on central cluster in the namespace hipster2
+# Deploy part of hipster app on remote cluster in the namespace hipster2
 kubectl apply -n hipster1  -f ${ISTIO_CONFIG_DIR}/remote
