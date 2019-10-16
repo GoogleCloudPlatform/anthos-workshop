@@ -27,9 +27,9 @@ spec:
     protocol: GRPC
   resolution: DNS
   addresses:
-  - 127.255.0.2
+  - 240.0.0.2
   endpoints:
-  - address: 34.66.142.94
+  - address: 104.154.171.66
     ports:
       grpc: 15443
 ---
@@ -47,9 +47,9 @@ spec:
     protocol: GRPC
   resolution: DNS
   addresses:
-  - 127.255.0.3
+  - 240.0.0.3
   endpoints:
-  - address: 34.66.142.94
+  - address: 104.154.171.66
     ports:
       grpc: 15443
 ---
@@ -67,9 +67,9 @@ spec:
     protocol: GRPC
   resolution: DNS
   addresses:
-  - 127.255.0.4
+  - 240.0.0.4
   endpoints:
-  - address: 34.66.142.94
+  - address: 104.154.171.66
     ports:
       grpc: 15443
 ---
@@ -87,8 +87,8 @@ spec:
     protocol: GRPC
   resolution: DNS
   addresses:
-  - 127.255.0.8
+  - 240.0.0.8
   endpoints:
-  - address: 34.66.142.94
+  - address: 104.154.171.66
     ports:
       grpc: 15443
