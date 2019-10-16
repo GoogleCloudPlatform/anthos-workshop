@@ -14,18 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Variables
-# Required from external Var
-export OPERATOR_YAML_LOCATION=$(gsutil cat gs://anthos-workshop-pc/cfg-op-loc)
-kubectl apply -f $OPERATOR_YAML_LOCATION
-
 echo "### "
 echo "### Begin install config manager"
 echo "### "
-
-
-## Deploy the CSP Config Management Operator
-kubectl apply -f $OPERATOR_YAML_LOCATION
-
-
+gsutil cp gs://config-management-release/released/latest/config-management-operator.yaml config-management-operator.yaml
+kubectl apply -f config-management-operator.yaml
+rm config-management-operator.yaml
 
