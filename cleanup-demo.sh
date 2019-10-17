@@ -26,7 +26,7 @@ echo "WORK_DIR set to $WORK_DIR"
 gcloud config set project $PROJECT
 
 # Delete source repo
-gcloud source repos delete config-repo
+gcloud source repos delete config-repo -q
 
 # Clean up resources in the background and wait for completion
 
