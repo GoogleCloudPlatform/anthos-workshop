@@ -194,7 +194,7 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     if [[ ${KOPS_GCE} == y ]]; then
         kubectx ${GCE_CONTEXT}
         kubectl create namespace gke-system
-        kubectl apply -f anthos-workshop/cloud-run/cloud-run-gke/cluster-local-gateway.yaml
+        kubectl apply -f ./cloud-run/cloud-run-gke/cluster-local-gateway.yaml
         kubectl apply -f https://storage.googleapis.com/cloud-run-for-anthos/install/0.9.0/2-cloudrun.yaml --selector knative.dev/crd-install=true
         kubectl apply -f https://storage.googleapis.com/cloud-run-for-anthos/install/0.9.0/2-cloudrun.yaml
     fi
