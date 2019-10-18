@@ -26,7 +26,7 @@ echo "WORK_DIR set to $WORK_DIR"
 gcloud config set project $PROJECT
 
 # Delete source repo
-gcloud source repos delete config-repo -q
+gcloud source repos delete config-repo --quiet
 
 # Clean up resources in the background and wait for completion
 
@@ -47,8 +47,6 @@ if [[ ${GKE_CLUSTER} == y ]]; then
     ./gke/cleanup-gke.sh
 fi
 
-# Delete kops storage bucket
-gsutil rm -r gs://kbcn-alpha10-kops-onprem/
 
 rm -rf $WORK_DIR
 

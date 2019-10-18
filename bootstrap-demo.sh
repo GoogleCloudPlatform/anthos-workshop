@@ -110,19 +110,19 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     # GKE
     shopt -s nocasematch
     if [[ ${GKE_CLUSTER} == y ]]; then
-        ./gke/provision-gke.sh &> ${WORK_DIR}/provision-gke.log &
+        ./gke/provision-gke.sh #&> ${WORK_DIR}/provision-gke.log &
     fi
 
     # GCE
     shopt -s nocasematch
     if [[ ${KOPS_GCE} == y ]]; then
-        ./connect-hub/provision-remote-gce.sh &> ${WORK_DIR}/provision-gce-${GCE_CONTEXT}.log &
+        ./connect-hub/provision-remote-gce.sh #&> ${WORK_DIR}/provision-gce-${GCE_CONTEXT}.log &
     fi
 
     # External
     shopt -s nocasematch
     if [[ ${KOPS_AWS} == y ]]; then
-        ./connect-hub/provision-remote-aws.sh &> ${WORK_DIR}/provision-aws-${AWS_CONTEXT}.log &
+        ./connect-hub/provision-remote-aws.sh #&> ${WORK_DIR}/provision-aws-${AWS_CONTEXT}.log &
 
 
     fi
