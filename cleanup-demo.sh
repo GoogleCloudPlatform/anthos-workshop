@@ -23,7 +23,7 @@ export WORK_DIR=${WORK_DIR:="${PWD}/workdir"}
 
 echo "WORK_DIR set to $WORK_DIR"
 
-gcloud config set project $PROJECT
+#gcloud config set project $PROJECT
 
 # Delete source repo
 gcloud source repos delete config-repo --quiet
