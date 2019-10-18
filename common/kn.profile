@@ -5,5 +5,5 @@ export KOPS_AWS=y
 export AWS_RND=1
 export AWS_CONTEXT=external
 export REPO_URL=https://github.com/cgrant/hipster
-export REPO_BRANCH=next2019
+export REPO_BRANCH=master
 export DEPLOY_HIPSTER=n
