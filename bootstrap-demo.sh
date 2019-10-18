@@ -91,6 +91,10 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
         read -e -p "AWS_SECRET_ACCESS_KEY [${AWS_SECRET_ACCESS_KEY:-$AWS_SECRET_ACCESS_KEY}]:" key
         export AWS_SECRET_ACCESS_KEY=${key:-"$AWS_SECRET_ACCESS_KEY"}
 
+        # AWS Uniquee Bucket Postfix
+        read -e -p "Bucket Postfix [${AWS_RND:-$AWS_RND}]:" key
+        export AWS_RND=${key:-"1"}
+
     fi
 
 
@@ -123,8 +127,6 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     shopt -s nocasematch
     if [[ ${KOPS_AWS} == y ]]; then
         ./connect-hub/provision-remote-aws.sh #&> ${WORK_DIR}/provision-aws-${AWS_CONTEXT}.log &
-
-
     fi
 
     wait

@@ -39,4 +39,5 @@ kubectl label namespace default istio-injection=enabled
 
 kubectl delete po $(kubectl get pod -n istio-system -l app=telemetry -o json | jq -r '.items[].metadata.name') -n istio-system
 
-kubectl apply -f asm-mtls.yaml #enable mTLS for some services
+# This script is run from a parent directory so adding the path
+kubectl apply -f ./service-mesh/asm-mtls.yaml #enable mTLS for some services
