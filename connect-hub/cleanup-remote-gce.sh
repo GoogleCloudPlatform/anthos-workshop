@@ -26,8 +26,11 @@ export KOPS_STORE=gs://$PROJECT-kops-$REMOTE_CLUSTER_NAME_BASE
 
 kops delete cluster --name $REMOTE_CLUSTER_NAME --state $KOPS_STORE --yes
 
-kubectx -d $REMOTE_CLUSTER_NAME_BASE
 
 gsutil -m rm -r $KOPS_STORE
+
+kubectx -d $REMOTE_CLUSTER_NAME_BASE
+
+
 
 

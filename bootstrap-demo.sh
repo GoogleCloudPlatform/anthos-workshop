@@ -109,6 +109,20 @@ if [[ $OSTYPE == "linux-gnu" && $CLOUD_SHELL == true ]]; then
     ./common/install-tools.sh
     echo -e "\nMultiple tasks are running asynchronously to setup your environment.  It may appear frozen, but you can check the logs in $WORK_DIR for additional details in another terminal window."
 
+## Enable services
+
+gcloud services enable \
+    cloudresourcemanager.googleapis.com \
+    container.googleapis.com \
+    gkeconnect.googleapis.com \
+    gkehub.googleapis.com \
+    serviceusage.googleapis.com \
+    sourcerepo.googleapis.com \
+    iamcredentials.googleapis.com \
+    contextgraph.googleapis.com \
+    stackdriver.googleapis.com 
+
+
 ## Provision Clusters
 
     # GKE
