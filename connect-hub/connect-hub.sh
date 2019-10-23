@@ -57,7 +57,7 @@ gcloud iam service-accounts keys create $GKE_SA_CREDS --project=$PROJECT \
 
 
 ### Connect Cluster to Hub
-gcloud alpha container hub register-cluster $REMOTE_CLUSTER_NAME_BASE\
+gcloud beta container memberships register $REMOTE_CLUSTER_NAME_BASE\
  --context=$REMOTE_CLUSTER_NAME \
  --service-account-key-file=$GKE_SA_CREDS \
  --kubeconfig-file=$REMOTE_KUBECONFIG \
