@@ -17,13 +17,6 @@
 
 # Reclaim Workspace
 
-
-
-
-
-
-git clone -b demo https://github.com/GoogleCloudPlatform/anthos-workshop.git anthos-workshop
-cd anthos-workshop
 source ./env
 
 
