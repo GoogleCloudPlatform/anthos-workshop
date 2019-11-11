@@ -37,7 +37,7 @@ gcloud beta container clusters create $CLUSTER --zone $ZONE \
     --image-type "COS" \
     --disk-size "100" \
     --scopes "https://www.googleapis.com/auth/compute","https://www.googleapis.com/auth/devstorage.read_only","https://www.googleapis.com/auth/logging.write","https://www.googleapis.com/auth/monitoring","https://www.googleapis.com/auth/servicecontrol","https://www.googleapis.com/auth/service.management.readonly","https://www.googleapis.com/auth/trace.append" \
-    --num-nodes "4" \
+    --num-nodes "3" \
     --enable-autoscaling --min-nodes 3 --max-nodes 6 \
     --network "default" \
     --enable-ip-alias \
