@@ -29,12 +29,12 @@ else
     echo "Creating cluster..."
     gcloud beta container clusters create ${CLUSTER_NAME} --zone ${CLUSTER_ZONE} \
         --username "admin" \
-        --machine-type "n1-standard-2" \
+        --machine-type "n1-standard-4" \
         --image-type "COS" \
         --disk-size "100" \
         --scopes "https://www.googleapis.com/auth/compute","https://www.googleapis.com/auth/devstorage.read_only","https://www.googleapis.com/auth/logging.write","https://www.googleapis.com/auth/monitoring","https://www.googleapis.com/auth/servicecontrol","https://www.googleapis.com/auth/service.management.readonly","https://www.googleapis.com/auth/trace.append" \
-        --num-nodes "4" \
-        --enable-autoscaling --min-nodes 4 --max-nodes 8 \
+        --num-nodes "2" \
+        --enable-autoscaling --min-nodes 2 --max-nodes 8 \
         --network "default" \
         --enable-ip-alias \
         --cluster-version=${CLUSTER_VERSION} \
