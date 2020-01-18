@@ -54,7 +54,7 @@ pe "export GKE_SA_CREDS=$WORK_DIR/$GKE_CONNECT_SA-creds.json"
 pe "kubectx remote"
 
 # Cluster registration
-pe "gcloud alpha container hub register-cluster $REMOTE_CLUSTER_NAME_BASE \
+pe "gcloud alpha container hub memberships register $REMOTE_CLUSTER_NAME_BASE \
  --context=$REMOTE_CLUSTER_NAME \
  --service-account-key-file=$GKE_SA_CREDS \
  --kubeconfig-file=$REMOTE_KUBECONFIG \
