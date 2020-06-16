@@ -18,4 +18,4 @@
 export REMOTE_CLUSTER_NAME_BASE="remote"
 export REMOTE_CLUSTER_NAME=$REMOTE_CLUSTER_NAME_BASE.k8s.local
 
-gcloud beta container memberships unregister --context=$REMOTE_CLUSTER_NAME_BASE
+gcloud container hub memberships unregister --context=$REMOTE_CLUSTER_NAME_BASE
