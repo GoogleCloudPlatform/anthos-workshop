@@ -39,7 +39,7 @@ kubectl --context central create secret generic cacerts -n istio-system \
 --from-file=${WORK_DIR}/istio-${ISTIO_VERSION}/samples/certs/cert-chain.pem
 
 # install istio CRDs
-helm install ${WORK_DIR}/istio-${ISTIO_VERSION}/install/kubernetes/helm/istio-init --name istio-init --namespace istio-system
+helm install istio-init ${WORK_DIR}/istio-${ISTIO_VERSION}/install/kubernetes/helm/istio-init --namespace istio-system
 
 # wait until all 23 CRDs are installed
 until [ $(kubectl get crds | grep 'istio.io\|certmanager.k8s.io' | wc -l) = 23 ]; do echo "Waiting for Istio CRDs to install..." && sleep 3; done
@@ -51,7 +51,7 @@ echo "Istio CRDs installed" && kubectl get crds | grep 'istio.io\|certmanager.k8
 kubectl --context central apply -f ${ISTIO_CONFIG_DIR}/istio-multicluster/kiali-secret.yaml
 
 # Install Istio
-helm install ${WORK_DIR}/istio-${ISTIO_VERSION}/install/kubernetes/helm/istio --name istio --namespace istio-system \
+helm install istio ${WORK_DIR}/istio-${ISTIO_VERSION}/install/kubernetes/helm/istio --namespace istio-system \
 --values ${ISTIO_CONFIG_DIR}/istio-multicluster/values-istio-multicluster-gateways.yaml
 
 
@@ -76,7 +76,7 @@ kubectl --context remote create secret generic cacerts -n istio-system \
 --from-file=${WORK_DIR}/istio-${ISTIO_VERSION}/samples/certs/cert-chain.pem
 
 # install istio CRDs
-helm install ${WORK_DIR}/istio-${ISTIO_VERSION}/install/kubernetes/helm/istio-init --name istio-init --namespace istio-system
+helm install istio-init ${WORK_DIR}/istio-${ISTIO_VERSION}/install/kubernetes/helm/istio-init --namespace istio-system
 
 # wait until all 23 CRDs are installed
 until [ $(kubectl get crds | grep 'istio.io\|certmanager.k8s.io' | wc -l) = 23 ]; do echo "Waiting for Istio CRDs to install..." && sleep 3; done
@@ -88,5 +88,5 @@ echo "Istio CRDs installed" && kubectl get crds | grep 'istio.io\|certmanager.k8
 kubectl --context remote apply -f ${ISTIO_CONFIG_DIR}/istio-multicluster/kiali-secret.yaml
 
 # Install Istio
-helm install ${WORK_DIR}/istio-${ISTIO_VERSION}/install/kubernetes/helm/istio --name istio --namespace istio-system \
+helm install istio ${WORK_DIR}/istio-${ISTIO_VERSION}/install/kubernetes/helm/istio --namespace istio-system \
 --values ${ISTIO_CONFIG_DIR}/istio-multicluster/values-istio-multicluster-gateways.yaml
