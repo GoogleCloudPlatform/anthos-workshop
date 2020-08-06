@@ -39,8 +39,9 @@ else
         --enable-ip-alias \
         --cluster-version=${CLUSTER_VERSION} \
         --enable-stackdriver-kubernetes \
-        --identity-namespace=${PROJECT}.svc.id.goog \
-        --labels csm=
+        --workload-pool=${PROJECT}.svc.id.goog \
+        --labels csm= \
+        --release-channel=regular
 fi
 
 echo "Getting cluster credentials"
