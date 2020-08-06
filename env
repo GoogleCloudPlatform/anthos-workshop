@@ -13,7 +13,7 @@
     export KUBECTX_VERSION=v0.7.0
     export HELM_VERSION=v2.14.3
     export CLUSTER_VERSION=1.15
-    export KOPS_VERSION=1.15.0
+    export KOPS_VERSION=v1.16.0
 
 
 ## Setting variables for GKE
