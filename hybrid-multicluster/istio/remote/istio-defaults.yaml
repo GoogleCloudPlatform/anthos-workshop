@@ -30,7 +30,7 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: ServiceEntry
 metadata:
-  name: whitelist-egress-googleapis
+  name: allow-egress-googleapis
 spec:
   hosts:
   - "metadata.google" # GCE metadata server
